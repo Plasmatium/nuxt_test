@@ -22,6 +22,7 @@ export default {
     }
   },
   asyncData: async context => {
+    console.warn('asyncData invoked')
     let ms = Math.round(Math.random() * 4000)
     await sleep(ms, console.warn, `took ${ms}ms`)
     return {time: ms}
