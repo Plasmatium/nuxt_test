@@ -3,15 +3,26 @@
     <div id="sidebar">
       <div id="sidebar-header">
         <h3>Lorem ipsum dolor.</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis dignissimos accusamus quos molestiae repellat maxime animi magni veritatis rerum quis quia hic debitis praesentium velit nihil voluptates vel deserunt autem exercitationem, provident sed nobis. Ratione, ipsum commodi accusamus dignissimos facere aut laudantium. Laudantium earum corrupti a nesciunt expedita, architecto repellendus.</p>
+        <h4 :style="set_font">another lorem: Lorem ipsum dolor.</h4>
+        <ul id="font-list">
+          <li v-for="font in font_list">
+            <a
+            :style='calc_tmp_style({font})'
+            class='button--green'
+            href="#"
+            @click.prevent="set_font({font})">
+              {{font}}
+            </a>
+          </li>
+        </ul>
+        <ul>
+          <li><a href="/essays/02i1ejg">e1</a></li>
+          <li><a href="/essays/02i2ejg">e2</a></li>
+          <li><a href="/essays/02i3ejg">e3</a></li>
+        </ul>
+        <ul id="contents">
+        </ul>
       </div>
-      <ul id="contents">
-        <li class="contents-item1"><a href="/items/item_1">link to item1</a></li>
-        <li class="contents-item2"><a href="/items/item_2">link to item2</a></li>
-        <li class="contents-item3"><a href="/items/item_3">link to item3</a></li>
-        <li class="contents-item4"><a href="/items/item_4">link to item4</a></li>
-        <li class="contents-item5"><a href="/items/item_5">link to item5</a></li>
-      </ul>
     </div>
     <div id="content">
       <nuxt />
@@ -19,10 +30,71 @@
   </div>
 </template>
 
+<script>
+  import {mapGetters, mapMutations, mapState} from 'vuex'
+
+  export default {
+    data () {
+      return {
+      }
+    },
+    methods: {
+      ...mapMutations([
+        'set_font'
+      ])
+    },
+    computed: {
+      ...mapState([]),
+      ...mapGetters([
+        'font_list',
+        'calc_tmp_style'
+      ])
+    }
+  }
+</script>
+
 <style type="scss">
 /* IDEA:  */
 h1.title {
   color: orange;
+}
+*, *:before, *:after
+{
+  font-size: 16px;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+.button--green
+{
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #3b8070;
+  color: #3b8070;
+  text-decoration: none;
+  padding: 10px 30px;
+}
+.button--green:hover
+{
+  color: #fff;
+  background-color: #3b8070;
+}
+.button--grey
+{
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #35495e;
+  color: #35495e;
+  text-decoration: none;
+  padding: 10px 30px;
+  margin-left: 15px;
+}
+.button--grey:hover
+{
+  color: #fff;
+  background-color: #35495e;
 }
 #layout {
   display: -webkit-flex;
@@ -34,10 +106,15 @@ h1.title {
 #sidebar {
   border: solid 1px #efefef;
   width: 15%;
+  min-width: 15em;
   padding: 1.5em;
 }
 #content {
   border: solid 1px #efefef;
-  width: 62%;
+  width: 80%;
+}
+
+#font-list li {
+  display: inline;
 }
 </style>
