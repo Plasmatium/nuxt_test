@@ -1,24 +1,16 @@
 <template lang="html">
   <div>
     <h1>ESSAY VIEW</h1>
-    <h3>Is This From Server: {{isServer}}</h3>
-    <br>
+    <h3>Is This From Server: {{isServer || false}}</h3>
     <h4 :style="calc_background_style">Current Font Family is {{currFontFamily}}</h4>
-    <p :style="calc_background_style">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-      Nisi consequatur laboriosam magnam laudantium tenetur ex
-      quaerat repellat numquam possimus officia, molestiae, magni
-      debitis expedita facilis quod vero nobis asperiores nihil eius
-      delectus totam. Expedita voluptas veritatis, corrupti dolore
-      beatae eaque itaque fugit sit, sint quo voluptatum cum ipsa eos
-      pariatur.
-    </p>
+    <demo class="demo" :plen="Number(essay_id)"/>
 
   </div>
 </template>
 
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
+import demo from '~components/demo'
 
 export default {
   layout: 'test_layout',
@@ -27,8 +19,8 @@ export default {
       time: 'loading'
     }
   },
-  asyncData: async ({isServer}) => {
-    return {isServer}
+  asyncData: async ({isServer, params: {essay_id}}) => {
+    return {isServer, essay_id}
   },
   computed: {
     ...mapGetters([
@@ -41,6 +33,9 @@ export default {
   },
   methods: {
     ...mapMutations([])
+  },
+  components: {
+    demo
   }
 }
 </script>
