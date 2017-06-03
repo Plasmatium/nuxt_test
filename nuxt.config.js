@@ -36,3 +36,24 @@ module.exports = {
     }
   }
 }
+
+
+// inject extra fonts
+const fs = require('fs')
+
+let fileList = fs.readdirSync('./assets/refined_fonts')
+let indexjs = []
+fontList = []
+
+fileList.forEach(fn => {
+  if (!fn.endsWith('.scss')) return
+  let lineStr = `import './${fn}'`
+  indexjs.push(lineStr)
+  fontList.push(fn.replace('.scss', ''))
+})
+fontList = JSON.stringify(fontList, null, '  ').replace(/\"/g, "'")
+
+indexjs.push(`export default ${fontList}`)
+indexjs.push('')
+
+fs.writeFileSync('./assets/refined_fonts/index.js', indexjs.join('\n'), 'utf-8')

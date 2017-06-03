@@ -2,29 +2,30 @@
   <div>
     <h1>ESSAY VIEW</h1>
     <h3>Is This From Server: {{isServer || false}}</h3>
-    <h4 :style="calc_background_style">Current Font Family is {{currFontFamily}}</h4>
-    <demo class="demo" :plen="Number(essay_id)"/>
+    <h4 :style="calcBackgroundStyle">Current Font Family is {{currFontFamily}}</h4>
+    <essay class="essay-container" :essay="essay"/>
 
   </div>
 </template>
 
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
-import demo from '~components/demo'
+import essay from '~components/essay'
+import { createEssay } from '~/middleware/para_utils'
 
 export default {
   layout: 'test_layout',
   data () {
     return {
-      time: 'loading'
     }
   },
   asyncData: async ({isServer, params: {essay_id}}) => {
-    return {isServer, essay_id}
+    const essay = createEssay(Number(essay_id))
+    return {isServer, essay_id, essay}
   },
   computed: {
     ...mapGetters([
-      'calc_background_style'
+      'calcBackgroundStyle'
     ]),
     ...mapState([
       'currFontFamily',
@@ -35,12 +36,12 @@ export default {
     ...mapMutations([])
   },
   components: {
-    demo
+    essay
   }
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 * {
   padding: 1%;
 }

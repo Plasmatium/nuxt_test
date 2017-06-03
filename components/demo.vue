@@ -1,35 +1,34 @@
+<!-- This demo.vue is not correct.
+There is an issue about "Mismatching childNodes vs. VNodes"
+use render function instead. -->
+
 <template lang="html">
   <div>
-    <p v-for="para in essay" :style="calc_background_style">
-      {{para}}</p>
+    <div :style="calcBackgroundStyle" class="chapter-block" v-for="chpt in essay">
+      <h3 class="chapter-title">{{Object.keys(chpt)[0]}}</h3>
+      <p class="paragraph" v-for="para in Object.values(chpt)[0]">
+        {{para}}</p>
+    </div>
   </div>
 </template>
 
 <script>
-import {createEssay} from '~/middleware/para_utils'
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
-    plen: {
-      type: Number,
-      required: true
-    }
+    'essay': Array
+  },
+  methods: {
   },
   computed: {
     ...mapGetters([
-      'calc_background_style'
-    ]),
-    essay () {
-      console.log('created para')
-      return createEssay()
-    }
+      'calcBackgroundStyle'
+    ])
   }
 }
 </script>
 
 <style lang="scss">
-p::first-letter {
-  font-size: 162%;
-}
+
 </style>

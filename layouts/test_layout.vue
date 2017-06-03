@@ -1,24 +1,34 @@
 <template>
-  <div id="layout">
-    <div id="sidebar">
+  <div id="layout" @click="outerClick"
+  :style="calcTmpStyle({font: menu_font, weight: 100})">
+    <div id="sidebar" :class="sidebarClass" @click.stop="innerClick">
       <div id="sidebar-header">
-        <h3>Lorem ipsum dolor.</h3>
-        <h4 :style="set_font">another lorem: Lorem ipsum dolor.</h4>
+        <h5 style="margin-top: 0;" class="button--grey">Menu</h5>
+        <h2>Pick a Font</h2>
         <ul id="font-list">
           <li v-for="font in font_list">
             <a
-            :style='calc_tmp_style({font})'
+            :style='calcTmpStyle({font})'
             class='button--green'
             href="#"
-            @click.prevent="set_font({font})">
+            @click.prevent="setFont({font})">
               {{font}}
             </a>
           </li>
         </ul>
-        <input type="text" v-model="essayLength">
-        <a href="" class="button--green" :href="essayUrl">
-          Goto Eassy {{essayLength}}
-        </a>
+        <div class="nav">
+          <input type="text" v-model="essayLength">
+          <a class="button--green" :href="essayUrl">
+            Goto Eassy {{essayLength}}
+          </a>
+        </div>
+        <div>
+          <input type="text" name="" id="" v-model="fweight">
+          <a href="#"
+          class="button--green"
+          @click.prevent="setWeight({weight: fweight})">
+            Set Font Weight to {{fweight}}</a>
+        </div>
         <ul id="contents">
         </ul>
       </div>
@@ -35,19 +45,29 @@
   export default {
     data () {
       return {
-        essayLength: 200
+        fweight: '100',
+        essayLength: 200,
+        sidebarClass: ['shrink']
       }
     },
     methods: {
       ...mapMutations([
-        'set_font'
-      ])
+        'setFont',
+        'setWeight'
+      ]),
+      outerClick (e) {
+        this.sidebarClass = ['shrink']
+      },
+      innerClick (e) {
+        this.sidebarClass = ['expand']
+      }
     },
     computed: {
       ...mapState([]),
       ...mapGetters([
         'font_list',
-        'calc_tmp_style'
+        'calcTmpStyle',
+        'menu_font'
       ]),
       essayUrl () {
         return `/essays/${this.essayLength}`
@@ -100,20 +120,29 @@ h1.title {
 #sidebar {
   border: solid 1px #efefef;
   border-radius: 3px;
-  // height: 15%;
-  padding: 1.5em;
-  top: 0;
+  padding-left: 1.5em;
+  padding-top: 0;
   left: 0;
+  top: 0;
   position: fixed;
   background-color: rgba(255, 255, 255, 0.97);
   box-shadow: 0.3px 0.3px 3px rgba(0, 0, 0, 0.382);
-  height: 30vh;
+  overflow: hidden;
+  transition: height 0.2s ease-in;
 }
+
+.shrink {
+  height: 2em;
+}
+.expand {
+  height: 62vh;
+}
+
 #content {
   border: solid 1px #efefef;
   border-radius: 3px;
   position: relative;
-  top: 35vh;
+  top: 2em;
   z-index: -1;
 }
 
@@ -123,5 +152,10 @@ h1.title {
 }
 #font-list a {
   font-size: 38.2%;
+}
+
+input, a {
+  font-size: 38.2%;
+  height: 1em;
 }
 </style>
