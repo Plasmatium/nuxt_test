@@ -54,7 +54,7 @@ export const createEssay = (paraLength) => {
   const essayStruct = []
   let currPara = []
   currPara.push(createPara())
-  let currChpt = {[createTitle()]: currPara}
+  let currChpt = [createTitle(), currPara]
   essayStruct.push(currChpt)
 
   for (let i = 0; i < paraLength;) {
@@ -62,7 +62,7 @@ export const createEssay = (paraLength) => {
       // this is for title
       currPara = []
       currPara.push(createPara())
-      currChpt = {[createTitle()]: currPara}
+      currChpt = [createTitle(), currPara]
       essayStruct.push(currChpt)
       continue
     }

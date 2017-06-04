@@ -1,7 +1,9 @@
 <template lang="html">
   <div>
-    <h1>ESSAY VIEW</h1>
+    <h1 ref='title'>ESSAY VIEW</h1>
     <h3>Is This From Server: {{isServer || false}}</h3>
+    <h4>Total chapter count: {{essay.length}}.
+      Total paragraph count: {{essay_id}}.</h4>
     <h4 :style="calcBackgroundStyle">Current Font Family is {{currFontFamily}}</h4>
     <essay class="essay-container" :essay="essay"/>
 

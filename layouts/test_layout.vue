@@ -3,7 +3,9 @@
   :style="calcTmpStyle({font: menu_font, weight: 100})">
     <div id="sidebar" :class="sidebarClass" @click.stop="innerClick">
       <div id="sidebar-header">
-        <h5 style="margin-top: 0;" class="button--grey">Menu</h5>
+        <h5 style="margin-top: 0;"
+        class="button--grey"
+        @click.stop="toggleMenu">Menu</h5>
         <h2>Pick a Font</h2>
         <ul id="font-list">
           <li v-for="font in font_list">
@@ -60,6 +62,13 @@
       },
       innerClick (e) {
         this.sidebarClass = ['expand']
+      },
+      toggleMenu (e) {
+        if (this.sidebarClass.includes('shrink')) {
+          this.sidebarClass = ['expand']
+        } else {
+          this.sidebarClass = ['shrink']
+        }
       }
     },
     computed: {
@@ -127,7 +136,7 @@ h1.title {
   position: fixed;
   background-color: rgba(255, 255, 255, 0.97);
   box-shadow: 0.3px 0.3px 3px rgba(0, 0, 0, 0.382);
-  overflow: hidden;
+  overflow: scroll;
   transition: height 0.2s ease-in;
 }
 
