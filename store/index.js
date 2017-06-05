@@ -21,10 +21,10 @@ const store = new Vuex.Store({
       return fontList.concat(rawFontStr.replace(/\+/g, ' ').split('|'))
     },
     calcTmpStyle: ({currFontWeight}) => ({ font = 'Arial', weight = currFontWeight }) => {
-      return `font-family: '${font}'; font-weight: ${weight}`
+      return {'font-family': font, 'font-weight': weight}
     },
     calcBackgroundStyle: ({ currFontFamily, currFontWeight }) => {
-      return `font-family: '${currFontFamily}'; font-weight: ${currFontWeight};`
+      return {'font-family': currFontFamily, fontWeight: currFontWeight}
     },
     menu_font () {
       return fontList[14]

@@ -11,6 +11,10 @@
 import {mapGetters} from 'vuex'
 import chapterBlock from '~/components/chapter-block'
 
+// this variable can not be put in the $vm.data, because
+// it can cause an infinite render loop
+let currDom = null
+
 export default {
   render (h) {
     // structure of this.essay is [[title: [para, para...]], [others]...}
@@ -22,18 +26,22 @@ export default {
       dom.push(titleDom)
       // dom.push(paraList.join('\n\n'))
       paraList.forEach((para, paraIdx) => {
-        dom.push(para)
-        dom.push(<br ref={`br_${chptIdx}_${paraIdx}`}/>)
+        let idStr = `p_${chptIdx}_${paraIdx}`
+        let paraDom = <p ref={idStr} key={idStr}>{dom.length + '----|' + para}</p>
+        dom.push(paraDom)
       })
     })
     this.maxDomLen = dom.length
-    this.firstDom = dom[this.renderRange[0]]
-    this.lastDom = dom[this.renderRange[1] - 1]
-    console.log(this.renderRange)
+    currDom = dom.slice(...this.renderRange)
+
+    if (!this.shouldRescroll) {
+      this.midRef = currDom[10].data.ref // total 20dom in rendering
+    }
+
     return (
       <div style={this.calcBackgroundStyle}
         class="essay"
-        ref="container">{dom.slice(...this.renderRange)}</div>
+        ref="container">{currDom}</div>
     )
   },
   props: {
@@ -41,26 +49,32 @@ export default {
   },
   data () {
     return {
-      renderRange: [0, 100],
+      renderRange: [0, 20],
       maxDomLen: -1,
-      firstDom: null,
-      lastDom: null
+      midDomLastTop: null,
+      midRef: null,
+      shouldRescroll: false
     }
   },
   methods: {
     handleScroll (e) {
-      // console.time('e')
       let bodyHeight = Math.round(Number(document.body.scrollHeight))
       let sY = Math.round(Number(window.scrollY))
       let innerHeight = Math.round(Number(window.innerHeight))
 
       let isBottom = Math.abs(bodyHeight - sY - innerHeight) === 0
+      let isTop = sY === 0
 
       if (isBottom) {
-        console.log('--------------')
-        this.renderRange = [0, 150]
-      }
-      // console.timeEnd('e')
+        console.log('touching bottom')
+        let [begin, end] = this.renderRange
+        this.renderRange = [begin + 5, end + 5]
+      } else if (isTop) {
+        console.log('touching top')
+        this.renderRange = [0, 20]
+      } else { return }
+      this.midDomLastTop = this.$refs[this.midRef].getBoundingClientRect().top
+      this.shouldRescroll = true
     },
     chapterToShow () {
       return [0, 1, 2].map(idx => this.essay[idx])
@@ -68,6 +82,19 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeDestory () {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
+  updated () {
+    console.warn('updated................')
+    if (this.shouldRescroll) {
+      let newTop = this.$refs[this.midRef].getBoundingClientRect().top
+      let deltaY = this.midDomLastTop - newTop
+      window.scrollTo(0, window.scrollY - deltaY)
+
+      this.shouldRescroll = false
+    }
   },
   computed: {
     ...mapGetters([
