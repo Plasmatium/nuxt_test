@@ -6,7 +6,8 @@ const rawFontStr = 'Abel|Actor|Alegreya+Sans|Amiko|Antic|Archivo+Narrow|Assistan
 const store = new Vuex.Store({
   state: {
     currFontFamily: 'Quicksand',
-    currFontWeight: 100
+    currFontWeight: 100,
+    essayChunk: null
   },
   mutations: {
     setFont (state, {font}) {
@@ -14,6 +15,9 @@ const store = new Vuex.Store({
     },
     setWeight (state, {weight}) {
       state.currFontWeight = weight || 100
+    },
+    injectEssayChunk (state, essayChunk) {
+      state.essayChunk = essayChunk
     }
   },
   getters: {

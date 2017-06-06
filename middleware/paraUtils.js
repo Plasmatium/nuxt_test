@@ -2,6 +2,8 @@ const random = function (seed) {
   return Number('0.' + Math.sin(seed).toString().substr(6))
 }
 let seed = 10
+let essay = null
+
 const rand = () => {
   let r = random(seed)
   seed = r - 0.1
@@ -45,7 +47,7 @@ export const createSentence = (x = 3, y = 20) => {
   return rslt.replace(/(^\w)/g, m => m.toUpperCase()) + punc
 }
 
-export const createPara = (x = 1, y = 15) => {
+const createPara = (x = 1, y = 15) => {
   let s = randInt(x, y)
   let rslt = []
   for (let i = 0; i < s; i++) {
@@ -55,12 +57,12 @@ export const createPara = (x = 1, y = 15) => {
   return rslt.join('')
 }
 
-export const createTitle = () => {
+const createTitle = () => {
   let title = createSentence(1, 7).slice(0, -2)
   return title.replace(/(\b\w?)/g, m => m.toUpperCase())
 }
 
-export const createEssay = (paraLength) => {
+const createEssay = (paraLength) => {
   seed = paraLength
   const essayStruct = []
   let currPara = []
@@ -83,4 +85,40 @@ export const createEssay = (paraLength) => {
   }
 
   return essayStruct
+}
+
+/** route object likes below:
+{ name: 'essays-essay_id',
+  meta: {},
+  path: '/essays/10000',
+  hash: '',
+  query: { chptnum: '0' },
+  params: { essay_id: '10000' },
+  fullPath: '/essays/10000?chptnum=0',
+  matched:
+   [ { path: '/essays/:essay_id?',
+       regex: /^\/essays(?:\/((?:[^\/]+?)))?(?:\/(?=$))?$/i,
+       components: [Object],
+       instances: {},
+       name: 'essays-essay_id',
+       parent: undefined,
+       matchAs: undefined,
+       redirect: undefined,
+       beforeEnter: undefined,
+       meta: {},
+       props: {} } ] }
+***********************************/
+export default async function ({ store, isServer, route }) {
+  // create essay if essay_id is new
+  let {query: {chptnum}, params} = route
+  if (seed !== params.essay_id) {
+    seed = params.essay_id
+    essay = createEssay(seed)
+  }
+  chptnum = Number(chptnum)
+
+  let prevChpt = essay[chptnum - 1] || null
+  let currChpt = essay[chptnum] || null
+  let nextChpt = essay[chptnum + 1] || null
+  store.commit('injectEssayChunk', {prevChpt, currChpt, nextChpt, chptnum})
 }

@@ -2,10 +2,10 @@
   <div>
     <h1 ref='title'>ESSAY VIEW</h1>
     <h3>Is This From Server: {{isServer || false}}</h3>
-    <h4>Total chapter count: {{essay.length}}.
+    <h4>Total chapter count: {{essayChunk.length}}.
       Total paragraph count: {{essay_id}}.</h4>
     <h4 :style="calcBackgroundStyle">Current Font Family is {{currFontFamily}}</h4>
-    <essay class="essay-container" :essay="essay"/>
+    <essay class="essay-container" :essayChunk="essayChunk"/>
 
   </div>
 </template>
@@ -13,7 +13,6 @@
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import essay from '~components/essay'
-import { createEssay } from '~/middleware/para_utils'
 
 export default {
   layout: 'test_layout',
@@ -22,8 +21,8 @@ export default {
     }
   },
   asyncData: async ({isServer, params: {essay_id}}) => {
-    const essay = createEssay(Number(essay_id))
-    return {isServer, essay_id, essay}
+    // const essay = createEssay(Number(essay_id))
+    return {isServer, essay_id}
   },
   computed: {
     ...mapGetters([
@@ -31,7 +30,8 @@ export default {
     ]),
     ...mapState([
       'currFontFamily',
-      'currFontWeight'
+      'currFontWeight',
+      'essayChunk'
     ])
   },
   methods: {
@@ -39,7 +39,8 @@ export default {
   },
   components: {
     essay
-  }
+  },
+  middleware: 'paraUtils'
 }
 </script>
 
