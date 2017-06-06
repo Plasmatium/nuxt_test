@@ -13,35 +13,30 @@ import chapterBlock from '~/components/chapter-block'
 
 // this variable can not be put in the $vm.data, because
 // it can cause an infinite render loop
-let currDom = null
+let _currDom = null
+let _maxDomLen = null
 
 export default {
   render (h) {
     // structure of this.essay is [[title: [para, para...]], [others]...}
-    let dom = []
-    this.essay.forEach((chpt, chptIdx) => {
+    _currDom = [[], []]
+    this.essay.slice(...this.renderRange).forEach((chpt, chptIdx) => {
       let [title, paraList] = chpt
       // paraList is an Array of string(paragraph)
       let titleDom = <h2 ref={`h2_${chptIdx}`}>{title}</h2>
-      dom.push(titleDom)
+      _currDom[chptIdx].push(titleDom)
       // dom.push(paraList.join('\n\n'))
       paraList.forEach((para, paraIdx) => {
-        let idStr = `p_${chptIdx}_${paraIdx}`
-        let paraDom = <p ref={idStr} key={idStr}>{dom.length + '----|' + para}</p>
-        dom.push(paraDom)
+        let idStr = `br_${chptIdx}_${paraIdx}`
+        let br = <br ref={idStr} key={idStr}/>
+        _currDom[chptIdx].push(para)
+        _currDom[chptIdx].push(br)
       })
     })
-    this.maxDomLen = dom.length
-    currDom = dom.slice(...this.renderRange)
-
-    if (!this.shouldRescroll) {
-      this.midRef = currDom[10].data.ref // total 20dom in rendering
-    }
-
     return (
       <div style={this.calcBackgroundStyle}
         class="essay"
-        ref="container">{currDom}</div>
+        ref="container">{_currDom}</div>
     )
   },
   props: {
@@ -49,8 +44,7 @@ export default {
   },
   data () {
     return {
-      renderRange: [0, 20],
-      maxDomLen: -1,
+      renderRange: [0, 2],
       midDomLastTop: null,
       midRef: null,
       shouldRescroll: false
@@ -58,6 +52,7 @@ export default {
   },
   methods: {
     handleScroll (e) {
+      console.time('rescroll')
       let bodyHeight = Math.round(Number(document.body.scrollHeight))
       let sY = Math.round(Number(window.scrollY))
       let innerHeight = Math.round(Number(window.innerHeight))
@@ -68,10 +63,22 @@ export default {
       if (isBottom) {
         console.log('touching bottom')
         let [begin, end] = this.renderRange
-        this.renderRange = [begin + 5, end + 5]
+        begin += 5
+        end += 5
+        if (end > _maxDomLen) {
+          end = _maxDomLen
+        }
+        this.renderRange = [begin, end]
       } else if (isTop) {
         console.log('touching top')
-        this.renderRange = [0, 20]
+        let [begin, end] = this.renderRange
+        begin -= 5
+        end -= 5
+        if (begin < 0) {
+          begin = 0
+          end = 20
+        }
+        this.renderRange = [begin, end]
       } else { return }
       this.midDomLastTop = this.$refs[this.midRef].getBoundingClientRect().top
       this.shouldRescroll = true
@@ -81,7 +88,7 @@ export default {
     }
   },
   mounted () {
-    window.addEventListener('scroll', this.handleScroll)
+    // window.addEventListener('scroll', this.handleScroll)
   },
   beforeDestory () {
     window.removeEventListener('scroll', this.handleScroll)
@@ -94,6 +101,7 @@ export default {
       window.scrollTo(0, window.scrollY - deltaY)
 
       this.shouldRescroll = false
+      console.timeEnd('rescroll')
     }
   },
   computed: {

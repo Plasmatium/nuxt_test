@@ -1,3 +1,13 @@
+const random = function (seed) {
+  return Number('0.' + Math.sin(seed).toString().substr(6))
+}
+let seed = 10
+const rand = () => {
+  let r = random(seed)
+  seed = r - 0.1
+  return r
+}
+
 export const deDup = allwords => {
   let list = []
   allwords.forEach(word => {
@@ -17,7 +27,7 @@ const wlist = `lorem,ipsum,dolor,sit,amet,consectetur,adipisicing,elit,officiis,
 const punclist = ',,,,,,............................!!!??:'
 
 export const randInt = (x, y) => {
-  let r = Math.random() * (y - x) + x
+  let r = rand() * (y - x) + x
   return Math.floor(r)
 }
 
@@ -51,6 +61,7 @@ export const createTitle = () => {
 }
 
 export const createEssay = (paraLength) => {
+  seed = paraLength
   const essayStruct = []
   let currPara = []
   currPara.push(createPara())
@@ -58,7 +69,7 @@ export const createEssay = (paraLength) => {
   essayStruct.push(currChpt)
 
   for (let i = 0; i < paraLength;) {
-    if (Math.random() > 0.95) {
+    if (rand() > 0.95) {
       // this is for title
       currPara = []
       currPara.push(createPara())

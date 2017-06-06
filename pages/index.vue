@@ -2,6 +2,7 @@
   <section class="container">
     <div>
       <logo/>
+      <demo/>
       <h1 class="title">
         NUXT
       </h1>
@@ -18,11 +19,13 @@
 
 <script>
 import Logo from '~components/Logo.vue'
+import demo from '~components/demo.vue'
 
 export default {
   layout: 'test_layout',
   components: {
-    Logo
+    Logo,
+    demo
   }
 }
 </script>
