@@ -5,6 +5,12 @@
     <h4>Total chapter count: {{essayChunk.length}}.
       Total paragraph count: {{essay_id}}.</h4>
     <h4 :style="calcBackgroundStyle">Current Font Family is {{currFontFamily}}</h4>
+    <a
+    class='button--green'
+    href="#"
+    @click.prevent="clk">
+      push
+    </a>
     <essay class="essay-container" :essayChunk="essayChunk"/>
 
   </div>
@@ -35,7 +41,10 @@ export default {
     ])
   },
   methods: {
-    ...mapMutations([])
+    ...mapMutations([]),
+    clk (e) {
+      console.log(123)
+    }
   },
   components: {
     essay

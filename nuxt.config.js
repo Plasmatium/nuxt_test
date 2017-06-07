@@ -2,6 +2,7 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  cache: true,
   head: {
     title: 'starter',
     meta: [
