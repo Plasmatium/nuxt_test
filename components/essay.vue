@@ -7,9 +7,10 @@
 </template> -->
 
 <script>
-// import {createPara} from '~/middleware/para_utils'
 import {mapGetters} from 'vuex'
 import chapterBlock from '~components/chapterBlock.vue'
+import axios from 'axios'
+global.axios = axios
 
 // this variable can not be put in the $vm.data, because
 // it can cause an infinite render loop
@@ -50,6 +51,7 @@ export default {
     ])
   },
   components: {
+    // 'chapter-block': () =import('~components/chapterBlock.vue')
     'chapter-block': chapterBlock
   }
 }

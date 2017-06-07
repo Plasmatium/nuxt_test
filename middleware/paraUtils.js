@@ -110,12 +110,14 @@ const createEssay = (paraLength) => {
 ***********************************/
 export default async function ({ store, isServer, route }) {
   // create essay if essay_id is new
+  console.log('creating essay')
   let {query: {chptnum}, params} = route
   if (seed !== params.essay_id) {
     seed = params.essay_id
     essay = createEssay(seed)
   }
   chptnum = Number(chptnum)
+  console.log('injecting essayChunk')
 
   let prevChpt = essay[chptnum - 1] || null
   let currChpt = essay[chptnum] || null
