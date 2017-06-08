@@ -9,7 +9,6 @@ export default {
       required: true
     },
     chptnum: {
-      type: Number,
       required: true
     }
   },

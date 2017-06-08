@@ -10,10 +10,6 @@ npm-debug.log
 # Nuxt generate
 dist
 
-# package-lock
-package-lock.json
-
 # ----------------
-lorem
 
 assets/refined_fonts/

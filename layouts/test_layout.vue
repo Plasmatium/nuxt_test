@@ -2,42 +2,36 @@
   <div id="layout" @click="outerClick"
   :style="calcTmpStyle({font: menu_font, weight: 900})">
     <div id="sidebar" :class="sidebarClass" @click.stop="innerClick">
-      <div id="sidebar-header">
-        <h5 v-once style="margin-top: 0;"
-        class="button--grey"
-        @click.stop="toggleMenu">Menu</h5>
-        <h2>Pick a Font</h2>
-        <ul v-once id="font-list">
-          <li v-for="font in font_list">
-            <a
-            :style='calcTmpStyle({font})'
-            class='button--green'
-            href="#"
-            @click.prevent="setFont({font})">
-              {{font}}
-            </a>
-          </li>
-        </ul>
-        <div class="nav">
-          <input type="text" v-model="essayLength">
-          <a class="button--green" :href="essayUrl">
-            Goto Eassy {{essayLength}}
+      <h5 v-once style="margin-top: 0;"
+      class="button--grey"
+      @click.stop="toggleMenu">Menu</h5>
+      <h2>Pick a Font</h2>
+      <ul v-once id="font-list">
+        <li v-for="font in font_list">
+          <a
+          :style='calcTmpStyle({font})'
+          class='button--green'
+          href="#"
+          @click.prevent="setFont({font})">
+            {{font}}
           </a>
-        </div>
-        <div>
-          <input type="text" name="" id="" v-model="fweight">
-          <a href="#"
-          class="button--green"
-          @click.prevent="setWeight({weight: fweight})">
-            Set Font Weight to {{fweight}}</a>
-        </div>
-        <ul id="contents">
-        </ul>
+        </li>
+      </ul>
+      <div class="nav">
+        <input type="text" v-model="essayLength">
+        <nuxt-link class="button--green" :to="essayUrl" />
+          Goto Eassy {{essayLength}}
+        </a>
+      </div>
+      <div>
+        <input type="text" name="" id="" v-model="fweight">
+        <a href="#"
+        class="button--green"
+        @click.prevent="setWeight({weight: fweight})">
+          Set Font Weight to {{fweight}}</a>
       </div>
     </div>
-    <div id="content">
-      <nuxt />
-    </div>
+    <nuxt />
   </div>
 </template>
 
@@ -79,7 +73,7 @@
         'menu_font'
       ]),
       essayUrl () {
-        return `/essays/${this.essayLength}`
+        return `/essays?essayID=${this.essayLength}&chptnum=1`
       }
     }
   }
