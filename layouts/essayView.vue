@@ -1,13 +1,13 @@
 <template>
   <div id="layout" @click="outerClick"
-  :style="calcTmpStyle({font: menu_font, weight: 900})">
+  :style="calcTmpStyle({font: menuFont, weight: 100})">
     <div id="sidebar" :class="sidebarClass" @click.stop="innerClick">
       <h5 v-once style="margin-top: 0;"
       class="button--grey"
       @click.stop="toggleMenu">Menu</h5>
       <h2>Pick a Font</h2>
       <ul v-once id="font-list">
-        <li v-for="font in font_list">
+        <li v-for="font in fontList">
           <a
           :style='calcTmpStyle({font})'
           class='button--green'
@@ -17,12 +17,6 @@
           </a>
         </li>
       </ul>
-      <div class="nav">
-        <input type="text" v-model="essayLength">
-        <nuxt-link class="button--green" :to="essayUrl" />
-          Goto Eassy {{essayLength}}
-        </a>
-      </div>
       <div>
         <input type="text" name="" id="" v-model="fweight">
         <a href="#"
@@ -32,17 +26,21 @@
       </div>
     </div>
     <nuxt />
+    <essay-nav></essay-nav>
   </div>
 </template>
 
 <script>
   import {mapGetters, mapMutations, mapState} from 'vuex'
+  import essayNav from '~components/essayNav'
 
   export default {
+    components: {
+      'essay-nav': essayNav
+    },
     data () {
       return {
         fweight: '100',
-        essayLength: 200,
         sidebarClass: ['shrink']
       }
     },
@@ -68,13 +66,10 @@
     computed: {
       ...mapState([]),
       ...mapGetters([
-        'font_list',
+        'fontList',
         'calcTmpStyle',
-        'menu_font'
-      ]),
-      essayUrl () {
-        return `/essays?essayID=${this.essayLength}&chptnum=1`
-      }
+        'menuFont'
+      ])
     }
   }
 </script>
@@ -105,8 +100,8 @@ h1.title {
   border: 1px solid #35495e;
   color: #35495e;
   text-decoration: none;
-  padding: 2px 2px;
-  margin-left: 1px;
+  padding: 0.1em 0.382em;
+  margin: 0 1em;
 }
 .button--grey:hover
 {
@@ -155,10 +150,5 @@ h1.title {
 }
 #font-list a {
   font-size: 38.2%;
-}
-
-input, a {
-  font-size: 38.2%;
-  height: 1em;
 }
 </style>

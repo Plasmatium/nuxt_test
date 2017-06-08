@@ -29,9 +29,8 @@ export default {
     let titleDom = <h3>{this.title}</h3>
     dom.push(titleDom)
     this.paragraphs.forEach(para => {
-      let br = <br/>
-      dom.push(para)
-      dom.push(br)
+      let paraDom = <p>{para}</p>
+      dom.push(paraDom)
     })
     return (
       <div id={`chapter-${this.chptnum}`}

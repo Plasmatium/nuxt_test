@@ -61,19 +61,24 @@ const createEssay = (paraLength) => {
 const essayCollection = {}
 
 module.exports = (req, res) => {
-  // console.log(req.method, req.originalUrl)
   let { essayID, chptnum } = req.query
-  console.log(essayID, chptnum)
+  console.log(req.query)
   let data
-  if (isNaN(Number(essayID))) {
-    data = {['Error essayID!']: `essayID is not a number: ${essayID}`}
+  if (isNaN(Number(essayID)) || isNaN(Number(chptnum))) {
+    errStr = `essayID or chptnum is not a number
+    essayID: ${essayID}, chptnum: ${chptnum}`
+    throw TypeError(errStr)
   }
+
   if (!(essayID in essayCollection)) {
     console.log(`Creating essay, id: ${essayID}.`)
     essayCollection[essayID] = createEssay(essayID)
   }
   // assume chapter starts from chapter-one, not zero
   data = essayCollection[essayID][chptnum - 1]
+  if (!data) {
+    throw TypeError('chapter not exist: chapter: ' + (chptnum - 1))
+  }
 
   res.send(data)
 }

@@ -2,7 +2,6 @@
   <section class="container">
     <div>
       <logo/>
-      <demo/>
       <h1 class="title">
         NUXT
       </h1>
@@ -12,6 +11,11 @@
       <div class="links">
         <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
         <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">GitHub</a>
+        <br>
+        <br>
+        <nuxt-link class='button--grey'
+          :to='`/essays?essayID=100&chptnum=1`'>
+          Start Reading</nuxt-link>
       </div>
     </div>
   </section>
@@ -19,13 +23,11 @@
 
 <script>
 import Logo from '~components/Logo.vue'
-import demo from '~components/demo.vue'
 
 export default {
   layout: 'test_layout',
   components: {
-    Logo,
-    demo
+    Logo
   }
 }
 </script>

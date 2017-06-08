@@ -3,10 +3,8 @@
     <h1 ref='title'>ESSAY VIEW</h1>
     <h3>Is This From Server: {{isServer || false}}</h3>
     <h4>Total paragraph count: {{query.essayID}}.</h4>
-    <h4 :style="calcBackgroundStyle">Current Font Family is {{currFontFamily}}</h4>
-    <nuxt-link :to="`/essays/20000?chptnum=${navNum}`">to chptnum: {{navNum}}</nuxt-link>
-    <input v-model='navNum'>
-    <!-- <essay class="essay-container" :essayChunk="essayChunk"/> -->
+    <h4 :style="calcBackgroundStyle">
+      Current Font Family is {{currFontFamily}}</h4>
     <chapter-block
     :chapter='chptData'
     :chptnum='query.chptnum'
@@ -19,20 +17,28 @@
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import chapterBlock from '~components/chapterBlock'
 import axios from 'axios'
-import qs from 'querystring'
 
 export default {
-  layout: 'test_layout',
+  layout: 'essayView',
   data () {
     return {
-      navNum: 20
     }
   },
-  asyncData: async ({isServer, query, req}) => {
-    let q = qs.stringify(query)
-    let {host} = req.headers
-    console.log(host)
-    let {data} = await axios.get(`http://${host}/api/getdemo?${q}`)
+  asyncData: async ({isServer, query, isDev}) => {
+    let port = isDev ? 3000 : 80
+    let instance = axios.create({
+      proxy: {port}
+    })
+    let data
+    try {
+      ({data} = await instance.get('/api/getdemo', {params: query}))
+    } catch (err) {
+      console.log(err)
+      data = [
+        'ERROR',
+        [`essayID: ${query.essayID}`, `chptnum: ${query.chptnum}`]
+      ]
+    }
     return {isServer, query, chptData: data}
   },
   computed: {
@@ -45,10 +51,16 @@ export default {
     ])
   },
   methods: {
-    ...mapMutations([])
+    ...mapMutations([
+      'setIdChptNum',
+      'setBaseUrl'
+    ])
   },
   components: {
     'chapter-block': chapterBlock
+  },
+  mounted () {
+    this.setIdChptNum(this.query)
   }
 }
 </script>
