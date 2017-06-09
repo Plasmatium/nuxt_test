@@ -8,8 +8,7 @@
       <h2>Pick a Font</h2>
       <ul v-once id="font-list">
         <li v-for="font in fontList">
-          <a
-          :style='calcTmpStyle({font})'
+          <a :style='calcTmpStyle({font})'
           class='button--green'
           href="#"
           @click.prevent="setFont({font})">
@@ -50,6 +49,7 @@
         'setWeight'
       ]),
       outerClick (e) {
+        console.log('outer clicked')
         this.sidebarClass = ['shrink']
       },
       innerClick (e) {

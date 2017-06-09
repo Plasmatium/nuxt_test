@@ -8,7 +8,9 @@ const store = new Vuex.Store({
     currFontFamily: 'Quicksand',
     currFontWeight: 100,
     currEssayID: null,
-    currChptnum: null
+    currChptnum: null,
+
+    currMenu: null
   },
   mutations: {
     setFont (state, {font}) {
@@ -20,6 +22,10 @@ const store = new Vuex.Store({
     setIdChptNum (state, {essayID, chptnum}) {
       state.currEssayID = essayID
       state.currChptnum = chptnum
+    },
+    showMenu (state, {menu}) {
+      Object.assign(state, 'currMenu', menu || null)
+      console.log(state.currMenu)
     }
   },
   getters: {

@@ -1,5 +1,5 @@
 <template lang="html">
-  <div id='essay-navigator' :style='calcTmpStyle' :class='cls'
+  <div id='essay-navigator' :style='calcTmpStyle' :class='clsList'
     @click.stop='clk'>
     <div id='nav'>
       <label for="essayid">essayID:</label>
@@ -7,25 +7,36 @@
       <label for="chptnum">Chapter Number:</label>
       <input name='chptnum' v-model='chptnum'/>
       <nuxt-link :to='queryUrl' class='button--grey'>Go</nuxt-link>
+      <expander />
     </div>
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations, mapState} from 'vuex'
 import qs from 'querystring'
+import expander from './public/expander'
 
 export default {
+  components: {
+    expander
+  },
   data () {
     return {
+      ...mapState([
+        'currMenu'
+      ]),
       chptnum: null,
-      essayID: null,
-      cls: null
+      essayID: null
     }
   },
   methods: {
+    ...mapMutations([
+      'showMenu'
+    ]),
     clk (e) {
-      this.cls = this.cls ? null : ['expand']
+      console.warn('---', this)
+      this.showMenu({menu: this})
     }
   },
   computed: {
@@ -38,6 +49,12 @@ export default {
       let query = qs.stringify({essayID, chptnum})
       let url = `/essays?${query}`
       return url
+    },
+    clsList () {
+      console.info(this.currMenu)
+      console.info(this)
+      console.log(this.currMenu === this)
+      return (this.currMenu === this) ? ['show'] : null
     }
   },
   mounted () {
@@ -59,7 +76,7 @@ export default {
   box-shadow: 0.3px 0.3px 3px rgba(0, 0, 0, 0.382);
   transition: height 0.2s ease-in;
 }
-#essay-navigator.expand {
+#essay-navigator.show {
   height: 62vh;
 }
 #nav {

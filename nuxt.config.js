@@ -36,7 +36,8 @@ module.exports = {
       }
     },
     vendor: [
-      'axios'
+      'axios',
+      'querystring'
     ],
     extractCSS: true
   },
