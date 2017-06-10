@@ -15,3 +15,5 @@ dist
 assets/refined_fonts/
 
 depr/
+
+!./assets/refined_fonts/decode.js

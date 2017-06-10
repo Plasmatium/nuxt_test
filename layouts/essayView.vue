@@ -46,11 +46,12 @@
     methods: {
       ...mapMutations([
         'setFont',
-        'setWeight'
+        'setWeight',
+        'showMenu'
       ]),
       outerClick (e) {
-        console.log('outer clicked')
-        this.sidebarClass = ['shrink']
+        console.log('outer click')
+        this.showMenu({menu: this})
       },
       innerClick (e) {
         this.sidebarClass = ['expand']

@@ -2,12 +2,16 @@
   <div>
     <h1 ref='title'>ESSAY VIEW</h1>
     <h3>Is This From Server: {{isServer || false}}</h3>
-    <h4>Total paragraph count: {{query.essayID}}.</h4>
+    <h4>Total chapters count: {{query.essayID}}.</h4>
     <h4 :style="calcBackgroundStyle">
       Current Font Family is {{currFontFamily}}</h4>
+    <br>
+    <h4>Book Name</h4>
+    <h2>{{bookName}}</h2>
+    <h4>Chapter {{query.chptnum}}</h4>
+    <h3>{{chptName}}</h3>
     <chapter-block
-    :chapter='chptData'
-    :chptnum='query.chptnum'
+    :paras='paras'
     :style="calcBackgroundStyle"/>
 
   </div>
@@ -33,13 +37,24 @@ export default {
     try {
       ({data} = await instance.get('/api/getdemo', {params: query}))
     } catch (err) {
-      console.log(err)
-      data = [
-        'ERROR',
-        [`essayID: ${query.essayID}`, `chptnum: ${query.chptnum}`]
-      ]
+      console.error(err)
     }
-    return {isServer, query, chptData: data}
+    let {
+      bookName,
+      chptName,
+      bookStats,
+      chptStats,
+      paras
+    } = data
+    return ({
+      isServer,
+      query,
+      bookName,
+      chptName,
+      bookStats,
+      chptStats,
+      paras
+    })
   },
   computed: {
     ...mapGetters([

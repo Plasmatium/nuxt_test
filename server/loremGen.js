@@ -1,4 +1,5 @@
 const {randInt, rand} = require('./utils')
+const {BookStruct, ChapterStruct} = require('./text/structs')
 
 const wlist = `lorem,ipsum,dolor,sit,amet,consectetur,adipisicing,elit,officiis,assumenda,illum,minima,incidunt,aut,temporibus,vitae,repellat,harum,a,commodi,rerum,nostrum,ratione,cupiditate,nemo,tenetur,reprehenderit,facere,voluptatibus,doloremque,at,obcaecati,id,praesentium,quod,explicabo,illo,ipsam,quaerat,dignissimos,iusto,ullam,odit,quae,expedita,ipsa,reiciendis,quibusdam,voluptas,atque,nihil,eos,sunt,aperiam,voluptatem,maiores,earum,totam,fuga,molestiae,quis,necessitatibus,tempore,accusamus,aliquam,possimus,perspiciatis,consequuntur,ut,laborum,repellendus,magni,sequi,officia,ex,est,animi,asperiores,beatae,provident,culpa,esse,nulla,velit,sint,numquam,sapiente,placeat,laboriosam,iste,error,omnis,cum,optio,veniam,dolores,enim,quam,doloribus,ea,deleniti,quidem,eligendi,quo,unde,aspernatur,et,similique,corrupti,tempora,debitis,excepturi,ad,ab,nobis,cumque,adipisci,molestias,hic,nam,autem,exercitationem,eius,vero,eveniet,veritatis,ducimus,modi,laudantium,soluta,maxime,rem,deserunt,repudiandae,suscipit,recusandae,natus,magnam,facilis,perferendis,corporis,quisquam,odio,voluptates,distinctio,blanditiis,saepe,mollitia,accusantium,minus,vel,porro,qui,voluptate,sed,fugiat,inventore,architecto,nisi,dolorum,voluptatum,quas,non,quasi,eaque,alias,libero,pariatur,fugit,impedit,neque,dicta,quos,nesciunt,eum,delectus,dolorem,dolore,iure,in,labore,aliquid,itaque,consequatur,quia`.split(',')
 
@@ -24,7 +25,6 @@ const createPara = (x = 1, y = 15) => {
   for (let i = 0; i < s; i++) {
     rslt.push(createSentence())
   }
-
   return rslt.join('')
 }
 
@@ -33,52 +33,66 @@ const createTitle = () => {
   return title.replace(/(\b\w?)/g, m => m.toUpperCase())
 }
 
-const createEssay = (paraLength) => {
-  seed = paraLength
-  const essayStruct = []
-  let currPara = []
-  currPara.push(createPara())
-  let currChpt = [createTitle(), currPara]
-  essayStruct.push(currChpt)
-
-  for (let i = 0; i < paraLength;) {
-    if (rand() > 0.95) {
-      // this is for title
-      currPara = []
-      currPara.push(createPara())
-      currChpt = [createTitle(), currPara]
-      essayStruct.push(currChpt)
-      continue
-    }
-
-    currPara.push(createPara())
-    ++i
+// --- reconstruction ---
+const createChapter = (x = 1, y = 50) => {
+  let title = createTitle()
+  let chapter = new ChapterStruct(title)
+  let s = randInt(x, y)
+  for (let i = 0; i < s; i++) {
+    chapter.push(createPara())
   }
-
-  return essayStruct
+  chapter.seal()
+  return chapter
 }
 
-const essayCollection = {}
+const createBook = (chptlength) => {
+  let bookName = createTitle()
+  let book = new BookStruct(bookName)
+  for (let i = 0; i < chptlength; i++) {
+    let chpt = createChapter()
+    book.add(chpt)
+  }
+  return book
+}
+// --- END ---
+
+const bookCollection = {}
 
 module.exports = (req, res) => {
   let { essayID, chptnum } = req.query
   console.log(req.query)
-  let data
+  let chapter
   if (isNaN(Number(essayID)) || isNaN(Number(chptnum))) {
     errStr = `essayID or chptnum is not a number
     essayID: ${essayID}, chptnum: ${chptnum}`
+    console.error(errStr)
     throw TypeError(errStr)
   }
 
-  if (!(essayID in essayCollection)) {
+  let book
+  if (!(essayID in bookCollection)) {
     console.log(`Creating essay, id: ${essayID}.`)
-    essayCollection[essayID] = createEssay(essayID)
+    book = createBook(essayID)
+    bookCollection[essayID] = book
+  } else {
+    book = bookCollection[essayID]
+    console.log('hit cache: ', essayID, book.bookName)
   }
   // assume chapter starts from chapter-one, not zero
-  data = essayCollection[essayID][chptnum - 1]
-  if (!data) {
-    throw TypeError('chapter not exist: chapter: ' + (chptnum - 1))
+  chapter = book[chptnum - 1]
+  if (!chapter) {
+    let errStr = 'chapter not exist: chapter: ' + chptnum
+    console.error(errStr)
+    throw TypeError(errStr)
   }
-
-  res.send(data)
+  // chapter传送时可能是通过JSON.stringify打包，所以会丢失title，
+  // 因此此处重新打包显式发送，而paras可直接由chapter表示，因为丢失了
+  // title，stats等，只剩下paras数组
+  res.send({
+    bookName: book.bookName,
+    chptName: chapter.title,
+    bookStats: book.stats,
+    chptStats: chapter.stats,
+    paras: chapter
+  })
 }

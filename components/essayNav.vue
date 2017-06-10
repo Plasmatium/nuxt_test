@@ -23,9 +23,6 @@ export default {
   },
   data () {
     return {
-      ...mapState([
-        'currMenu'
-      ]),
       chptnum: null,
       essayID: null
     }
@@ -35,11 +32,13 @@ export default {
       'showMenu'
     ]),
     clk (e) {
-      console.warn('---', this)
       this.showMenu({menu: this})
     }
   },
   computed: {
+    ...mapState([
+      'currMenu'
+    ]),
     ...mapGetters([
       'calcTmpStyle',
       'menuFont'
@@ -51,9 +50,6 @@ export default {
       return url
     },
     clsList () {
-      console.info(this.currMenu)
-      console.info(this)
-      console.log(this.currMenu === this)
       return (this.currMenu === this) ? ['show'] : null
     }
   },
@@ -72,7 +68,7 @@ export default {
   height: 6em;
   width: 90vw;
   border-radius: 0.3em;
-  background-color: rgba(255, 255, 255, 0.97);
+  background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0.3px 0.3px 3px rgba(0, 0, 0, 0.382);
   transition: height 0.2s ease-in;
 }

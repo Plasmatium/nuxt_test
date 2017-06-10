@@ -24,8 +24,7 @@ const store = new Vuex.Store({
       state.currChptnum = chptnum
     },
     showMenu (state, {menu}) {
-      Object.assign(state, 'currMenu', menu || null)
-      console.log(state.currMenu)
+      state.currMenu = menu
     }
   },
   getters: {

@@ -4,21 +4,12 @@ export default {
     parastyle: {
       type: Object
     },
-    chapter: {
+    paras: {
       type: Array,
-      required: true
-    },
-    chptnum: {
       required: true
     }
   },
   computed: {
-    title () {
-      return this.chapter[0]
-    },
-    paragraphs () {
-      return this.chapter[1]
-    }
   },
   data () {
     return {
@@ -26,12 +17,10 @@ export default {
   },
   render (h) {
     let dom = []
-    let titleDom = <h3>{this.title}</h3>
-    dom.push(titleDom)
-    this.paragraphs.forEach(para => {
+    this.paras.forEach(para => {
       // let paraDom = <p>{para}</p>
       // dom.push(paraDom)
-      let br = <br style='line-height: 2.55em'/>
+      let br = <br/>
       dom.push(para)
       dom.push(br)
     })
@@ -46,5 +35,10 @@ export default {
 <style lang="scss" scoped>
 .chapter {
   color: #777;
+  line-height: 1.62em;
+}
+
+br {
+  line-height: 2.55em;
 }
 </style>

@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.16.1",
+    "lru-cache": "^4.1.0",
     "nuxt": "latest"
   },
   "scripts": {
