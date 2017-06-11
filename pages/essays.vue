@@ -53,6 +53,7 @@ export default {
       chptStats,
       paras
     } = data
+    console.log('---------', bookName)
     return ({
       isServer,
       essayID,

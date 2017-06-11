@@ -5,7 +5,6 @@
  * @param  {[type]} paras [description]
  * @return {[type]}       [description]
  */
-
 const _getChptStats = (paras) => {
   let rslt = {
     parasCount: paras.length,
@@ -14,9 +13,10 @@ const _getChptStats = (paras) => {
     freq: {}
   }
   paras.forEach(para => {
-    let wordsMatch = para.match(/\b([\w\'\.]+)\b/g)
+    let wordsMatch = para.match(/\b([\w\'\.]+)\b/g) || []
     rslt.wordsCount += wordsMatch.length
     rslt.charsCount += para.length
+
 
     wordsMatch.forEach(word => {
       // 如果word全大写，就是I或者术语缩写，作为key不变，否则全小写
