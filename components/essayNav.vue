@@ -14,8 +14,8 @@
 
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
-import qs from 'querystring'
 import expander from './public/expander'
+import {encodeQuery} from '~/server/utils'
 
 export default {
   components: {
@@ -23,8 +23,8 @@ export default {
   },
   data () {
     return {
-      chptnum: null,
-      essayID: null
+      essayID: null,
+      chptnum: null
     }
   },
   methods: {
@@ -37,16 +37,20 @@ export default {
   },
   computed: {
     ...mapState([
-      'currMenu'
+      'currMenu',
+      'currQueryStr',
+      'isServer'
     ]),
     ...mapGetters([
       'calcTmpStyle',
-      'menuFont'
+      'menuFont',
+      'getIDnNum'
     ]),
     queryUrl () {
       let {essayID, chptnum} = this
-      let query = qs.stringify({essayID, chptnum})
-      let url = `/essays?${query}`
+      let query = {essayID, chptnum}
+      let b64Str = encodeQuery(query, this.isServer)
+      let url = `/essays?q=${b64Str}`
       return url
     },
     clsList () {
@@ -54,8 +58,9 @@ export default {
     }
   },
   mounted () {
-    this.essayID = this.$store.state.currEssayID
-    this.chptnum = this.$store.state.currChptnum
+    let {essayID, chptnum} = this.getIDnNum
+    this.essayID = essayID
+    this.chptnum = chptnum
   }
 }
 </script>

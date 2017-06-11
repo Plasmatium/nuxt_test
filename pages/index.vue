@@ -14,7 +14,7 @@
         <br>
         <br>
         <nuxt-link class='button--grey'
-          :to='`/essays?essayID=100&chptnum=1`'>
+          :to='startUrl'>
           Start Reading</nuxt-link>
       </div>
     </div>
@@ -23,11 +23,22 @@
 
 <script>
 import Logo from '~components/Logo.vue'
+import {mapGetters} from 'vuex'
 
 export default {
-  layout: 'test_layout',
+  layout: 'default',
   components: {
     Logo
+  },
+  computed: {
+    ...mapGetters(['demoBookStartUrl']),
+    startUrl () {
+      let queryStr = this.demoBookStartUrl
+      return `/essays?q=${queryStr}`
+    }
+  },
+  fetch: async ({store, isServer}) => {
+    store.commit('setRenderSide', {isServer})
   }
 }
 </script>
