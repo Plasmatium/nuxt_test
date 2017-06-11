@@ -50,7 +50,6 @@
         'showMenu'
       ]),
       outerClick (e) {
-        console.log('outer click')
         this.showMenu({menu: this})
       },
       innerClick (e) {

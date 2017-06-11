@@ -28,8 +28,6 @@ axios.get(url).then(resp => {
   fs.writeFileSync('./assets/googlefonts.scss', resp.data, 'utf-8')
 })
 
-
-const Nuxt = require('nuxt')
 const express = require('express')
 app = express()
 
@@ -42,19 +40,21 @@ app.get(/\/api\/getdemo/, mwLoremGen)
 app.use('/fonts', express.static('./assets/refined_fonts/target'))
 // -- END INJECTION ---
 
-const host = process.env.HOST || '127.0.0.1'
-const port = process.env.PORT || '3000'
+module.exports = app
 
-let config = require('./nuxt.config.js')
-config.dev = !(process.env.NODE_ENV === 'production')
-
-const nuxt = new Nuxt(config)
-nuxt.build().then(() => {
-  app.use(nuxt.render)
-  app.listen(3000)
-  console.log('Server is listening on http://localhost:3000')
-})
-.catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+// const host = process.env.HOST || '127.0.0.1'
+// const port = process.env.PORT || '3000'
+//
+// let config = require('./nuxt.config.js')
+// config.dev = !(process.env.NODE_ENV === 'production')
+//
+// const nuxt = new Nuxt(config)
+// nuxt.build().then(() => {
+//   app.use(nuxt.render)
+//   app.listen(3000)
+//   console.log('Server is listening on http://localhost:3000')
+// })
+// .catch((error) => {
+//   console.error(error)
+//   process.exit(1)
+// })

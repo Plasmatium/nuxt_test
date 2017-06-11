@@ -30,9 +30,10 @@ export default {
     }
   },
   asyncData: async ({store, isServer, query, isDev}) => {
-    let port = isDev ? 3000 : 80
+    let port = isDev ? 3000 : 3000 // can't run on 80 on mac
+    let host = isDev ? 'localhost' : '192.168.1.30'
     let instance = axios.create({
-      proxy: {port}
+      proxy: {host, port}
     })
     store.commit('setRenderSide', {isServer})
     store.commit('setQueryStr', {queryStr: query})
@@ -45,7 +46,6 @@ export default {
     }
 
     let {essayID, chptnum} = decodeQuery(query.q, isServer)
-    console.log('阿斯顿发', {essayID, chptnum})
     let {
       bookName,
       chptName,
