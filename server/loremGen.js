@@ -1,6 +1,6 @@
 const {randInt, rand, decodeQuery, qs} = require('./utils')
 const {BookStruct, ChapterStruct} = require('./text/structs')
-const {fetch, url} = require('./crawler')
+const {fetch, urlMap} = require('./crawler')
 
 const wlist = `lorem,ipsum,dolor,sit,amet,consectetur,adipisicing,elit,officiis,assumenda,illum,minima,incidunt,aut,temporibus,vitae,repellat,harum,a,commodi,rerum,nostrum,ratione,cupiditate,nemo,tenetur,reprehenderit,facere,voluptatibus,doloremque,at,obcaecati,id,praesentium,quod,explicabo,illo,ipsam,quaerat,dignissimos,iusto,ullam,odit,quae,expedita,ipsa,reiciendis,quibusdam,voluptas,atque,nihil,eos,sunt,aperiam,voluptatem,maiores,earum,totam,fuga,molestiae,quis,necessitatibus,tempore,accusamus,aliquam,possimus,perspiciatis,consequuntur,ut,laborum,repellendus,magni,sequi,officia,ex,est,animi,asperiores,beatae,provident,culpa,esse,nulla,velit,sint,numquam,sapiente,placeat,laboriosam,iste,error,omnis,cum,optio,veniam,dolores,enim,quam,doloribus,ea,deleniti,quidem,eligendi,quo,unde,aspernatur,et,similique,corrupti,tempora,debitis,excepturi,ad,ab,nobis,cumque,adipisci,molestias,hic,nam,autem,exercitationem,eius,vero,eveniet,veritatis,ducimus,modi,laudantium,soluta,maxime,rem,deserunt,repudiandae,suscipit,recusandae,natus,magnam,facilis,perferendis,corporis,quisquam,odio,voluptates,distinctio,blanditiis,saepe,mollitia,accusantium,minus,vel,porro,qui,voluptate,sed,fugiat,inventore,architecto,nisi,dolorum,voluptatum,quas,non,quasi,eaque,alias,libero,pariatur,fugit,impedit,neque,dicta,quos,nesciunt,eum,delectus,dolorem,dolore,iure,in,labore,aliquid,itaque,consequatur,quia`.split(',')
 
@@ -65,7 +65,7 @@ module.exports = (req, res) => {
   console.log({essayID, chptnum})
 
   // below is temporary code
-  if (essayID !== 'alice') {
+  if (!isNaN(Number(essayID))) {
     let chapter
     if (isNaN(Number(essayID)) || isNaN(Number(chptnum))) {
       errStr = `essayID or chptnum is not a number
@@ -104,26 +104,31 @@ module.exports = (req, res) => {
   } else {
     // very urgly here !!!!!!!!!!!
     // TODO: !!!
-    if (bookCollection['alice']) {
-      let book = bookCollection['alice']
+    let b = urlMap[essayID[1]]
+    let url = b.url
+    if (bookCollection[b.name]) {
+      let book = bookCollection[b.name]
       let chapter = book.chapters[chptnum - 1]
       res.send({
         bookName: book.bookName,
         chptName: chapter.title,
         bookStats: book.stats,
         chptStats: chapter.stats,
-        paras: chapter.paras
+        paras: chapter.paras,
+        pvt_data: book
       })
     } else {
       fetch(url).then(book => {
-        bookCollection['alice'] = book
-        let chapter = book[chptnum - 1]
+        bookCollection[b.name] = book
+        console.log(book)
+        let chapter = book.chapters[chptnum - 1]
         res.send({
           bookName: book.bookName,
           chptName: chapter.title,
           bookStats: book.stats,
           chptStats: chapter.stats,
-          paras: chapter.paras
+          paras: chapter.paras,
+          pvt_data: book
         })
       })
     }

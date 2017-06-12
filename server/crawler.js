@@ -5,6 +5,18 @@ const axios = require('axios')
 const fs = require('fs')
 const {ChapterStruct, BookStruct} = require('./text/structs')
 
+const isChapterHead = (para) => {
+  // 必须只有一行
+  if (para.trim().includes('\n')) { return false }
+  // 非字母开头不算
+  if (!/^[a-zA-Z0-9]/.test(para)) { return false }
+  // 包含chapter，无论大小写，都是一个标题
+  if (/chapter/i.test(para)) { return true }
+  // 所有字母都是大写的
+  if (para.toUpperCase() === para) { return true }
+  return false
+}
+
 const fetch = async (url) => {
   let {data} = await axios.get(url)
 
@@ -33,6 +45,7 @@ const fetch = async (url) => {
   // then one line
   metaList = metaList.join('\n').split('\n')
   let metaInfo = metaList.map(line => {
+    if (!line.includes(':')) { return }
     let [k, v] = line.split(':')
     return {[k.trim()]: v.trim()}
   })
@@ -43,7 +56,7 @@ const fetch = async (url) => {
   let book = new BookStruct(metaInfo.Title, metaInfo)
   let currChpt = null
   mainParaList.forEach(para => {
-    if (para.includes('CHAPTER')) {
+    if (isChapterHead(para)) {
       if (currChpt) {
         currChpt.seal()
         book.add(currChpt)
@@ -61,16 +74,39 @@ const fetch = async (url) => {
   return book
 }
 
-urlMap = [
+const urlMap = [
   {
-    name: "Alice",
+    name: 'Alice',
     url: 'http://www.gutenberg.org/files/11/11-0.txt'
   }, {
-    name: "thirty-nine",
+    name: 'thirty-nine',
     url: 'http://www.gutenberg.org/cache/epub/558/pg558.txt'
   }, {
-    name:
+    name: 'Pride and Prejudice',
+    url: 'http://www.gutenberg.org/ebooks/42671.txt.utf-8'
+  }, {
+    name: 'Sense and Sensibility',
+    url: 'http://www.gutenberg.org/cache/epub/21839/pg21839.txt'
+  }, {
+    name: 'Lady Susan',
+    url: 'http://www.gutenberg.org/ebooks/946.txt.utf-8'
+  }, {
+    name: 'Love and Friendship [sic]',
+    url: 'http://www.gutenberg.org/files/1212/1212-0.txt'
+  }, {
+    name: 'The Letter of Jane Austen',
+    url: 'http://www.gutenberg.org/ebooks/42078.txt.utf-8'
   }
 ]
 
-module.exports = {fetch, url}
+const fetchAll = () => {
+  let booksdata = urlMap.map(bookInfo => {
+    console.log('\n--------\nfetching:', bookInfo.name)
+    return fetch(bookInfo.url).then(data => {
+      console.log(bookInfo.name, 'OK!\n')
+      return data
+    })
+  })
+}
+
+module.exports = {fetch, url, urlMap, fetchAll}

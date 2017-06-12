@@ -44,16 +44,16 @@ export default {
     } catch (err) {
       console.error(err)
     }
-
+    console.log(data)
     let {essayID, chptnum} = decodeQuery(query.q, isServer)
     let {
       bookName,
       chptName,
       bookStats,
       chptStats,
-      paras
+      paras,
+      pvt_data
     } = data
-    console.log('---------', bookName)
     return ({
       isServer,
       essayID,
@@ -62,7 +62,8 @@ export default {
       chptName,
       bookStats,
       chptStats,
-      paras
+      paras,
+      pvt_data
     })
   },
   computed: {
