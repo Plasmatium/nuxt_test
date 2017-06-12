@@ -37,14 +37,17 @@ const _getChptStats = (paras) => {
  * 章节结构，由标题和多个段落组成，段落组织为原生Array
  * @type {[type]}
  */
-const ChapterStruct = class extends Array {
+const ChapterStruct = class {
   constructor (title) {
-    super()
     this.title = title
+    this.paras = []
     this.stats = null
+
+    this.push = this.paras.push.bind(this.paras)
+    this.forEach = this.paras.forEach.bind(this.paras)
   }
   seal () {
-    this.stats = _getChptStats(this)
+    this.stats = _getChptStats(this.paras)
   }
   statsMergeTo (totalStats) {
     if (this.stats === null) {
@@ -55,7 +58,7 @@ const ChapterStruct = class extends Array {
       totalStats[key] += this.stats[key]
     })
     Object.entries(this.stats.freq).forEach(([word, count]) => {
-      if (totalStats.freq[word]) {
+      if (totalStats.freq[word] === undefined) {
         totalStats.freq[word] += count
       } else {
         totalStats.freq[word] = count
@@ -68,10 +71,11 @@ const ChapterStruct = class extends Array {
  * 书结构，由书名和多个章节（ChapterStruct）以及其他（附录，前言等）组成
  * @type {[type]}
  */
-const BookStruct = class extends Array {
-  constructor (bookName) {
-    super()
+const BookStruct = class {
+  constructor (bookName, bookInfo) {
     this.bookName = bookName
+    this.bookInfo = bookInfo
+    this.chapters = []
     this.stats = {
       chptsCount: 0,
       parasCount: 0,
@@ -79,9 +83,12 @@ const BookStruct = class extends Array {
       charsCount: 0,
       freq: {}
     }
+
+    this.push = this.chapters.push.bind(this.chapters)
+    this.forEach = this.chapters.forEach.bind(this.chapters)
   }
   add (chapter) {
-    super.push(chapter)
+    this.push(chapter)
     this.stats.chptsCount++
     chapter.statsMergeTo(this.stats)
   }

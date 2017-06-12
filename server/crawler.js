@@ -36,11 +36,11 @@ const fetch = async (url) => {
     let [k, v] = line.split(':')
     return {[k.trim()]: v.trim()}
   })
-
+  metaInfo = Object.assign({}, ...metaInfo)
 
   // Pour into main structure
   let mainParaList = paraList.slice(startIdx+1, endIdx)
-  let book = new BookStruct(metaInfo.Title)
+  let book = new BookStruct(metaInfo.Title, metaInfo)
   let currChpt = null
   mainParaList.forEach(para => {
     if (para.includes('CHAPTER')) {
@@ -57,7 +57,20 @@ const fetch = async (url) => {
   // Don't forget the last chapter
   currChpt.seal()
   book.add(currChpt)
+  console.log(book.bookName)
   return book
 }
+
+urlMap = [
+  {
+    name: "Alice",
+    url: 'http://www.gutenberg.org/files/11/11-0.txt'
+  }, {
+    name: "thirty-nine",
+    url: 'http://www.gutenberg.org/cache/epub/558/pg558.txt'
+  }, {
+    name:
+  }
+]
 
 module.exports = {fetch, url}

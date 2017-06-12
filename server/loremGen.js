@@ -85,7 +85,7 @@ module.exports = (req, res) => {
     }
 
     // assume chapter starts from chapter-one, not zero
-    chapter = book[chptnum - 1]
+    chapter = book.chapters[chptnum - 1]
     if (!chapter) {
       let errStr = 'chapter not exist: chapter: ' + chptnum
       console.error(errStr)
@@ -99,20 +99,20 @@ module.exports = (req, res) => {
       chptName: chapter.title,
       bookStats: book.stats,
       chptStats: chapter.stats,
-      paras: chapter
+      paras: chapter.paras
     })
   } else {
     // very urgly here !!!!!!!!!!!
     // TODO: !!!
     if (bookCollection['alice']) {
       let book = bookCollection['alice']
-      let chapter = book[chptnum - 1]
+      let chapter = book.chapters[chptnum - 1]
       res.send({
         bookName: book.bookName,
         chptName: chapter.title,
         bookStats: book.stats,
         chptStats: chapter.stats,
-        paras: chapter
+        paras: chapter.paras
       })
     } else {
       fetch(url).then(book => {
@@ -123,7 +123,7 @@ module.exports = (req, res) => {
           chptName: chapter.title,
           bookStats: book.stats,
           chptStats: chapter.stats,
-          paras: chapter
+          paras: chapter.paras
         })
       })
     }
