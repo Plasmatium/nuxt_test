@@ -22,10 +22,11 @@ fs.writeFileSync('./assets/refined_fonts/index.js', indexjs.join('\n'), 'utf-8')
 //   `export default ${fontList}`,
 //   'utf-8')
 //google fonts
-const url = 'https://fonts.googleapis.com/css?family=Abel|Actor|Alegreya+Sans|Amiko|Antic|Archivo+Narrow|Assistant|Cabin|Cabin+Condensed|Catamaran|Chivo|Droid+Sans|Ek+Mukta|Hind|Josefin+Sans|Lato|Magra|Marvel|Maven+Pro|Molengo|Muli|Nunito|Nunito+Sans|Open+Sans|Oxygen|PT+Sans|Questrial|Quicksand|Raleway|Roboto|Source+Sans+Pro|Spinnaker:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i'
+const url = `http://fonts.googlefonts.net/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic|Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic|Slabo+27px|Lato:400,100,100italic,300,300italic,400italic,700,700italic,900,900italic|Source+Sans+Pro:400,200,200italic,300,300italic,400italic,600,600italic,700,700italic,900,900italic|Raleway:400,100,200,300,500,600,700,800,900|PT+Sans:400,400italic,700,700italic|Droid+Sans:400,700|Arimo:400,400italic,700,700italic|Noto+Sans:400,400italic,700,700italic|Alegreya+Sans:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,800,800italic,900,900italic|Dosis:400,200,300,500,600,700,800|Cabin:400,400italic,500,500italic,600,600italic,700,700italic|Oxygen:400,300,700|Inconsolata:400,700|Hind:400,300,500,600,700|Nunito:400,300,700|Muli:400,300,300italic,400italic|Josefin+Sans:400,100,100italic,300,300italic,400italic|Signika:400,300,600,700|Crimson+Text:400,400italic,600,600italic,700,700italic|Maven+Pro:400,500,700,900|Varela+Round|Quicksand:400,300,700|Fira+Sans:400,300,300italic,400italic,500,500italic,700,700italic|Questrial|Josefin+Slab:400,100,100italic,300,300italic,400italic,600,600italic,700,700italic|Pontano+Sans|Istok+Web:400,700italic,700,400italic|News+Cycle:400,700|Quattrocento+Sans:400,700italic,700,400italic&subset=latin,latin-ext`
+
 axios.get(url).then(resp => {
   let data = resp.data
-  fs.writeFileSync('./assets/googlefonts.scss', resp.data, 'utf-8')
+  fs.writeFileSync('./assets/refined_fonts/google/googlefonts.scss', resp.data, 'utf-8')
 })
 
 const express = require('express')

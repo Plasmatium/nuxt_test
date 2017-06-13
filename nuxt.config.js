@@ -43,7 +43,7 @@ module.exports = {
   },
   css: [
     {
-      src: '~/assets/googlefonts.scss',
+      src: '~/assets/refined_fonts/google/googlefonts.scss',
       lang: 'scss'
     },
     {

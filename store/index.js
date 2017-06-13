@@ -2,7 +2,39 @@ import Vuex from 'vuex'
 import _fontList from '~/assets/refined_fonts/extra_fonts_list'
 import {encodeQuery, decodeQuery} from '~/server/utils'
 
-const rawFontStr = 'Abel|Actor|Alegreya+Sans|Amiko|Antic|Archivo+Narrow|Assistant|Cabin|Cabin+Condensed|Catamaran|Chivo|Droid+Sans|Ek+Mukta|Hind|Josefin+Sans|Lato|Magra|Marvel|Maven+Pro|Molengo|Muli|Nunito|Nunito+Sans|Open+Sans|Oxygen|PT+Sans|Questrial|Quicksand|Raleway|Roboto|Source+Sans+Pro|Spinnaker'
+// const rawFontStr = 'Abel|Actor|Alegreya+Sans|Amiko|Antic|Archivo+Narrow|Assistant|Cabin|Cabin+Condensed|Catamaran|Chivo|Droid+Sans|Ek+Mukta|Hind|Josefin+Sans|Lato|Magra|Marvel|Maven+Pro|Molengo|Muli|Nunito|Nunito+Sans|Open+Sans|Oxygen|PT+Sans|Questrial|Quicksand|Raleway|Roboto|Source+Sans+Pro|Spinnaker'
+const rawFontStr = [
+  'Open Sans',
+  'Roboto',
+  'Slabo 27px',
+  'Lato',
+  'Source Sans Pro',
+  'Raleway',
+  'PT Sans',
+  'Droid Sans',
+  'Arimo',
+  'Noto Sans',
+  'Alegreya Sans',
+  'Dosis',
+  'Cabin',
+  'Oxygen',
+  'Inconsolata',
+  'Hind',
+  'Nunito',
+  'Muli',
+  'Josefin Sans',
+  'Signika',
+  'Crimson Text',
+  'Maven Pro',
+  'Varela Round',
+  'Quicksand',
+  'Fira Sans',
+  'Questrial',
+  'Josefin Slab',
+  'Pontano Sans',
+  'Istok Web',
+  'News Cycle',
+  'Quattrocento Sans' ]
 
 const store = new Vuex.Store({
   state: {
@@ -34,7 +66,8 @@ const store = new Vuex.Store({
   },
   getters: {
     fontList () {
-      return _fontList.concat(rawFontStr.replace(/\+/g, ' ').split('|'))
+      // return _fontList.concat(rawFontStr.replace(/\+/g, ' ').split('|'))
+      return [..._fontList, ...rawFontStr]
     },
     calcTmpStyle: ({currFontWeight}) => ({ font = 'Arial', weight = currFontWeight }) => {
       return {'font-family': font, 'font-weight': weight}

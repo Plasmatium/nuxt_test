@@ -17,7 +17,6 @@ const _getChptStats = (paras) => {
     rslt.wordsCount += wordsMatch.length
     rslt.charsCount += para.length
 
-
     wordsMatch.forEach(word => {
       // 如果word全大写，就是I或者术语缩写，作为key不变，否则全小写
       if (word !== word.toUpperCase()) {
@@ -72,7 +71,7 @@ const ChapterStruct = class {
  * @type {[type]}
  */
 const BookStruct = class {
-  constructor (bookName, bookInfo) {
+  constructor (bookName=null, bookInfo=null) {
     this.bookName = bookName
     this.bookInfo = bookInfo
     this.chapters = []

@@ -125,7 +125,7 @@ h1.title {
   position: fixed;
   background-color: rgba(255, 255, 255, 0.97);
   box-shadow: 0.3px 0.3px 3px rgba(0, 0, 0, 0.382);
-  overflow: hidden;
+  overflow: scroll;
   transition: height 0.2s ease-in;
   z-index: 10;
 }

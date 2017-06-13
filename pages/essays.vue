@@ -44,7 +44,7 @@ export default {
     } catch (err) {
       console.error(err)
     }
-    console.log(data)
+
     let {essayID, chptnum} = decodeQuery(query.q, isServer)
     let {
       bookName,
