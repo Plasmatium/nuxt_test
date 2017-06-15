@@ -2,7 +2,7 @@
 // class Spider
 
 const axios = require('axios')
-const jsdom = require('jsdom')
+const cheerio = require('cheerio')
 const {BookStruct, ChapterStruct} = require('./text/structs')
 
 // TODO: isDev should be its real value
@@ -38,7 +38,7 @@ const Spider = class {
       console.error(err.stack)
     })
 
-    // this.dom = cheerio.load(data)
+    this.dom = cheerio.load(data)
   }
 
   async run (forceFetch=false) {
