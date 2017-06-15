@@ -1,151 +1,91 @@
 // --- spider.js ---
 // class Spider
 
+const axios = require('axios')
+const jsdom = require('jsdom')
+const {BookStruct, ChapterStruct} = require('./text/structs')
+
+// TODO: isDev should be its real value
+const isDev = true
+const jqueryCDN = isDev ? (
+  'https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.js'
+) : (
+  'https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js'
+)
+
 // ------------------URL
 const urlMap = [
   {
     name: 'Alice',
-    url: 'http://www.gutenberg.org/files/11/11-0.txt'
-  }, {
-    name: 'thirty-nine',
-    url: 'http://www.gutenberg.org/cache/epub/558/pg558.txt'
-  }, {
-    name: 'Pride and Prejudice',
-    url: 'http://www.gutenberg.org/ebooks/42671.txt.utf-8'
-  }, {
-    name: 'Sense and Sensibility',
-    url: 'http://www.gutenberg.org/cache/epub/21839/pg21839.txt'
-  }, {
-    name: 'Lady Susan',
-    url: 'http://www.gutenberg.org/ebooks/946.txt.utf-8'
-  }, {
-    name: 'Love and Friendship [sic]',
-    url: 'http://www.gutenberg.org/files/1212/1212-0.txt'
-  }, {
-    name: 'The Letter of Jane Austen',
-    url: 'http://www.gutenberg.org/ebooks/42078.txt.utf-8'
+    url: 'http://www.gutenberg.org/files/11/11-h/11-h.htm'
   }
 ]
 
-// -------------------------------------
-
-const axios = require('axios')
-const {ChapterStruct, BookStruct} = require('./text/structs')
+// ----------------------------------------------------------------
 
 const Spider = class {
   constructor (url) {
     this.url = url
     this.book = new BookStruct()
-    this.funcQueue = []
+    this.dom = null
+    this.insQueue = []
   }
 
   async init () {
-    let {data} = await axios.get(url).catch(err => {
-      console.error('Fetching book failed, url may be broken.')
-      console.error('Detials:', err)
+    let {data} = await axios.get(this.url).catch(err => {
+      console.error('Spider init failed, maybe the url or web is broken.')
+      console.error('url is:', this.url)
+      console.error(err.stack)
     })
 
-    // make data transform into paragraph list
-    // \r\n => \n
-    data = data.replace(/\r\n/g, '\n')
-    // Split to parts, \n\n(paragraph)\n\n is the pattern
-    let paraList = []
-    data.split('\n\n').forEach(p => {
-      if (!p) { return }
-      paraList.push(p.trim())
-    })
-    this.raw = paraList
+    // this.dom = cheerio.load(data)
   }
 
-  add (func, propName=null) {
-    //assign propName
-    if (!propName) {
-      if (!func.name) {
-        err = Error('process function must assign a name, or specify a propName')
-        console.error(err.stack)
-        throw err
-      }
-      propName = func.name
+  async run (forceFetch=false) {
+    if (!this.dom || forceFetch) {
+      await this.init()
     }
-    if (typeof func !== 'function') {
-      throw Error(`${func} is not a Function.\nGot type ${typeof func}`)
-    }
-    this.funcQueue.push({func, propName})
-  }
 
-  async run () {
-    await this.init()
-    debugger
-    this.funcQueue.forEach((processor, step) => {
-      let {func, propName} = processor
-      let result
+    this.insQueue.forEach((func, step) => {
       try {
-        result = func(this.book, this.raw)
+        func(this.dom, this.book)
       } catch (err) {
-        let errStr = `
-          ${err.stack}
-
-          *=*=*=*=*=*=*=*=*=*=
-
-          Error occured in function run(),
-          step: ${step}
-          propName: ${propName}
-          func: ${func}
-          url: ${url}
-          -----------------------------------------
-          book name: ${this.book.bookName || 'undefined yet'}
-          details: ${err}
-        `
-        console.error(errStr)
-      }
-      if (result !== undefined) {
-        this.book[propName] = result
+        console.error('Spider -> Error occured in step:', step)
+        console.error('step name is:', String(func.name))
+        console.error('details:\n', err)
       }
     })
   }
 }
 
-const index = (book, raw) => {
-  let start, end
-  raw.forEach((para, idx) => {
-    if (para.includes('*** START OF THIS PROJECT GUTENBERG EBOOK')) {
-      start = idx
+const _contents = ($, book) => {
+  let tryStr = ['CONTENTS', 'Contents', 'contents']
+  let maybeContents = null;
+  for (let str of tryStr) {
+    let selected = $(`:contains(${str})`).nextUntil(':header')
+    if (selected.length) {
+      maybeContents = selected
+      break
     }
-    if (para.includes('End of Project Gutenberg')) {
-      end = idx
-    }
+  }
+  if (!maybeContents) {
+    throw Error('No contents found')
+  }
+
+  let anchors = maybeContents.find('a')
+  if (!anchors.length) {
+    throw Error('No anchors found in contents')
+  }
+
+  let contents = []
+  contents.forEach.call(anchors, (a) => {
+    let title = a.children[0].data
   })
-  let body = {start, end}
-  Object.assign(book, {index: {body}})
+  book.contents = contents
 }
 
-const info = (book, raw) => {
-  // book info is ahead of the book text body
-  let startIdx = book.index.body.start
-  let metaList = raw.slice(0, startIdx)
-  // merge, then split, because some of paras contain more
-  // then one line
-  metaList = metaList.join('\n').split('\n')
-  let metaInfo = metaList.map(line => {
-    if (!line.includes(':')) { return }
-    let [k, v] = line.split(':')
-    return {[k.trim()]: v.trim()}
-  })
-  return Object.assign({}, ...metaInfo)
-}
+global.s = new Spider(urlMap[0].url)
+s.insQueue.push(_contents)
+s.run().then(()=>console.log('init finished'))
 
-// -------demo below
-
-let steps = [index, info]
-let url = urlMap[6].url
-console.log(url)
-let spider = new Spider(urlMap[6].url)
-spider.init()
-
-steps.forEach(step => {
-  spider.add(step)
-})
-
-spider.run()
-module.exports = spider
-// ------demo end
+module.exports = Spider
