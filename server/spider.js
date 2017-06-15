@@ -18,6 +18,9 @@ const urlMap = [
   {
     name: 'Alice',
     url: 'http://www.gutenberg.org/files/11/11-h/11-h.htm'
+  }, {
+    name: 'test',
+    url: 'http://www.gutenberg.org/files/54900/54900-h/54900-h.htm'
   }
 ]
 
@@ -48,12 +51,15 @@ const Spider = class {
 
     this.insQueue.forEach((func, step) => {
       try {
+        console.time(func.name)
         func(this.dom, this.book)
       } catch (err) {
         console.error('Spider -> Error occured in step:', step)
         console.error('step name is:', String(func.name))
+        console.error('book url is:', this.url)
         console.error('details:\n', err)
       }
+      console.timeEnd(func.name)
     })
   }
 }
@@ -76,16 +82,47 @@ const _contents = ($, book) => {
   if (!anchors.length) {
     throw Error('No anchors found in contents')
   }
-
   let contents = []
-  contents.forEach.call(anchors, (a) => {
-    let title = a.children[0].data
+  contents.forEach.call(anchors, (a, idx) => {
+    let title = a.children[0].data.trim()
+    if (title) {
+      contents.push(title)
+      a.attribs.id = `para-${idx}`
+    }
   })
   book.contents = contents
 }
 
-global.s = new Spider(urlMap[0].url)
-s.insQueue.push(_contents)
+const _chapters = ($, book) => {
+  let contents = book.contents
+  // last para-anchor is the end claim
+  let lastClaim = null
+  let keywords = ['End of the Project Gutenberg', 'End of Project Gutenberg']
+  keywords.forEach(str => {
+    let claim = $(`body :contains(${str})`)
+    if (claim.length) {
+      lastClaim = claim
+    }
+  })
+  if(!lastClaim) {
+    throw Error('No last claim found in book')
+  }
+  lastClaim[0].attribs.id = `para-${contents.length}`
+  let chapters = []
+  contents.forEach((title, idx) => {
+    let chapter = $(`:contains(${title})`)
+    .nextUntil(`#para-${idx + 1}`)
+    .find('p')
+
+    console.log(chapter.length)
+    chapters.push(chapter)
+  })
+
+  book.chapters = chapters
+}
+
+global.s = new Spider(urlMap[1].url)
+s.insQueue = [_contents, _chapters]
 s.run().then(()=>console.log('init finished'))
 
 module.exports = Spider
