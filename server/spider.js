@@ -94,29 +94,17 @@ const _contents = ($, book) => {
 }
 
 const _chapters = ($, book) => {
+  debugger
   let contents = book.contents
   // last para-anchor is the end claim
-  let lastClaim = null
-  let keywords = ['End of the Project Gutenberg', 'End of Project Gutenberg']
-  keywords.forEach(str => {
-    let claim = $(`body :contains(${str})`)
-    if (claim.length) {
-      lastClaim = claim
-    }
-  })
-  if(!lastClaim) {
-    throw Error('No last claim found in book')
+  for(let i = 0; i < contents.length -1; i++) {
+    let [start, end] = contents.slice(i, i+2)
+    let paras = $(`:header:contains(${start})`).nextUntil(
+      `:header:contains(${end})`
+    )
+    // expect innerText is `paras.text()`
+    debugger
   }
-  lastClaim[0].attribs.id = `para-${contents.length}`
-  let chapters = []
-  contents.forEach((title, idx) => {
-    let chapter = $(`:contains(${title})`)
-    .nextUntil(`#para-${idx + 1}`)
-    .find('p')
-
-    console.log(chapter.length)
-    chapters.push(chapter)
-  })
 
   book.chapters = chapters
 }
