@@ -82,35 +82,68 @@ const _contents = ($, book) => {
   if (!anchors.length) {
     throw Error('No anchors found in contents')
   }
+
   let contents = []
   contents.forEach.call(anchors, (a, idx) => {
-    let title = a.children[0].data.trim()
+    // TODO: 此处应使用eq(idx).text()来获取具体title文字
+    // 有时候title文字里面有换行和多余空格，此处全部正则替换为一个空格
+    let title = a.children[0].data.trim().replace(/\s+/g, ' ')
     if (title) {
       contents.push(title)
-      a.attribs.id = `para-${idx}`
     }
   })
   book.contents = contents
 }
 
-const _chapters = ($, book) => {
-  debugger
+const _buildBook = ($, book) => {
   let contents = book.contents
+
+  // 插入最后章节前的定位
+  let endStr = '<1=2=3=4= THE END ====>' + new Date()
+  contents.push(endStr)
+  $('pre').eq(-1).before(`<h3>${endStr}</h3>`)
   // last para-anchor is the end claim
   for(let i = 0; i < contents.length -1; i++) {
+    console.log(`chapter${i}`)
+    console.time('chapter calc time')
     let [start, end] = contents.slice(i, i+2)
     let paras = $(`:header:contains(${start})`).nextUntil(
       `:header:contains(${end})`
     )
     // expect innerText is `paras.text()`
-    debugger
+    let chapter = new ChapterStruct(start)
+    let textList = paras.text().split(/\n\s*\n/)
+    textList.forEach(para => {
+      if (para) {
+        chapter.push(para)
+      }
+    })
+    chapter.seal()
+    book.add(chapter)
+    console.timeEnd('chapter calc time')
   }
 
-  book.chapters = chapters
+  // 移除定位符
+  delete contents[contents.length-1]
 }
 
-global.s = new Spider(urlMap[1].url)
-s.insQueue = [_contents, _chapters]
+const _bookInfo = ($, book) => {
+  let bookInfo = {}
+  $('pre')[0].attribs.id = 'first-pre'
+  let infoText = $('pre').eq(0).text()
+  infoText.split('\n').forEach(line => {
+    if (!line.includes(':')) { return }
+    let [k, v] = line.split(':')
+    if (k && v) {
+      bookInfo[k] = v
+    }
+  })
+  book.bookInfo = bookInfo
+  debugger
+}
+
+global.s = new Spider(urlMap[0].url)
+s.insQueue = [_contents, _buildBook, _bookInfo]
 s.run().then(()=>console.log('init finished'))
 
 module.exports = Spider

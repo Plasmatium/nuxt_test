@@ -18,6 +18,8 @@ const _getChptStats = (paras) => {
     rslt.charsCount += para.length
 
     wordsMatch.forEach(word => {
+      // 不统计阿拉伯数字作为单词
+      if (!isNaN(Number(word))) { return }
       // 如果word全大写，就是I或者术语缩写，作为key不变，否则全小写
       if (word !== word.toUpperCase()) {
         word = word.toLowerCase()
