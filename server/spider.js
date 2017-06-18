@@ -19,7 +19,7 @@ const urlMap = [
     name: 'Alice',
     url: 'http://www.gutenberg.org/files/11/11-h/11-h.htm'
   }, {
-    name: 'test',
+    name: `THE RETURN OF THE O'MAHONY`,
     url: 'http://www.gutenberg.org/files/54900/54900-h/54900-h.htm'
   }
 ]
@@ -83,15 +83,21 @@ const _contents = ($, book) => {
     throw Error('No anchors found in contents')
   }
 
-  let contents = []
-  contents.forEach.call(anchors, (a, idx) => {
-    // TODO: 此处应使用eq(idx).text()来获取具体title文字
+  let contents = [];
+  for (let idx=0; idx<anchors.length; idx++) {
     // 有时候title文字里面有换行和多余空格，此处全部正则替换为一个空格
-    let title = a.children[0].data.trim().replace(/\s+/g, ' ')
+    let title = anchors.eq(idx).text().trim().replace(/\s+/g, ' ')
     if (title) {
+      // 排除该目录title就是书名，有些目录第一条是书名
+      // 另外考虑到文章在录入时人为疏忽写错的内容，比如：
+      // ’和'的区别，这部分通过regexp把所有非字母替换成
+      // 短横'-'
+      let refinedTitle = title.toLowerCase().replace(/\W/g, '-')
+      let refinedBookName = book.bookName.toLowerCase().replace(/\W/g, '-')
+      if (refinedTitle === refinedBookName) { continue }
       contents.push(title)
     }
-  })
+  }
   book.contents = contents
 }
 
@@ -102,7 +108,7 @@ const _buildBook = ($, book) => {
   let endStr = '<1=2=3=4= THE END ====>' + new Date()
   contents.push(endStr)
   $('pre').eq(-1).before(`<h3>${endStr}</h3>`)
-  // last para-anchor is the end claim
+
   for(let i = 0; i < contents.length -1; i++) {
     console.log(`chapter${i}`)
     console.time('chapter calc time')
@@ -129,21 +135,22 @@ const _buildBook = ($, book) => {
 
 const _bookInfo = ($, book) => {
   let bookInfo = {}
-  $('pre')[0].attribs.id = 'first-pre'
   let infoText = $('pre').eq(0).text()
   infoText.split('\n').forEach(line => {
     if (!line.includes(':')) { return }
     let [k, v] = line.split(':')
+    k = k.trim()
+    v = v.trim()
     if (k && v) {
       bookInfo[k] = v
     }
   })
+  book.bookName = bookInfo.Title || bookInfo.titles
   book.bookInfo = bookInfo
-  debugger
 }
 
-global.s = new Spider(urlMap[0].url)
-s.insQueue = [_contents, _buildBook, _bookInfo]
+global.s = new Spider(urlMap[1].url)
+s.insQueue = [_bookInfo, _contents, _buildBook]
 s.run().then(()=>console.log('init finished'))
 
 module.exports = Spider
