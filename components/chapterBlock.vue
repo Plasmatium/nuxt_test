@@ -4,8 +4,8 @@ export default {
     parastyle: {
       type: Object
     },
-    paras: {
-      type: Array,
+    chapter: {
+      type: Object,
       required: true
     }
   },
@@ -16,8 +16,9 @@ export default {
     }
   },
   render (h) {
+    let {paras} = this.chapter
     let dom = []
-    this.paras.forEach(para => {
+    paras.forEach(para => {
       // let paraDom = <p>{para}</p>
       // dom.push(paraDom)
       let br = <br/>

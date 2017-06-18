@@ -1,22 +1,17 @@
 // --- spider.js ---
 // class Spider
 
+const fs = require('fs')
+const path = require('path')
 const axios = require('axios')
 const cheerio = require('cheerio')
 const {BookStruct, ChapterStruct} = require('./text/structs')
-
-// TODO: isDev should be its real value
-const isDev = true
-const jqueryCDN = isDev ? (
-  'https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.js'
-) : (
-  'https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js'
-)
+const {isEqTitle} = require('./utils')
 
 // ------------------URL
 const urlMap = [
   {
-    name: 'Alice',
+    name: `ALICE’S ADVENTURES IN WONDERLAND`,
     url: 'http://www.gutenberg.org/files/11/11-h/11-h.htm'
   }, {
     name: `THE RETURN OF THE O'MAHONY`,
@@ -27,11 +22,30 @@ const urlMap = [
 // ----------------------------------------------------------------
 
 const Spider = class {
-  constructor (url) {
-    this.url = url
-    this.book = new BookStruct()
+  constructor (item) {
+    this.url = item.url
+    this.bookName = item.name
     this.dom = null
     this.insQueue = []
+  }
+
+  dump (dir='../cache/') {
+    dir = path.join(__dirname, dir)
+    try {
+      fs.readdirSync(dir)
+    } catch (err) {
+      console.error(`Spider dump file error, dir not exist: ${dir}`)
+      console.error('details:\n', err.stack)
+    }
+
+    if (!this.book.bookName) {
+      // TODO: logInfo()
+      throw Error('book name not exist')
+    }
+
+    let jsonStr = JSON.stringify(this.book)
+    let filepath = path.join(dir, this.book.bookName)
+    fs.writeFileSync(filepath, jsonStr, 'utf-8')
   }
 
   async init () {
@@ -41,7 +55,9 @@ const Spider = class {
       console.error(err.stack)
     })
 
+    this.book = new BookStruct()
     this.dom = cheerio.load(data)
+    this.insQueue = [_bookInfo, _contents, _buildBook]
   }
 
   async run (forceFetch=false) {
@@ -88,13 +104,7 @@ const _contents = ($, book) => {
     // 有时候title文字里面有换行和多余空格，此处全部正则替换为一个空格
     let title = anchors.eq(idx).text().trim().replace(/\s+/g, ' ')
     if (title) {
-      // 排除该目录title就是书名，有些目录第一条是书名
-      // 另外考虑到文章在录入时人为疏忽写错的内容，比如：
-      // ’和'的区别，这部分通过regexp把所有非字母替换成
-      // 短横'-'
-      let refinedTitle = title.toLowerCase().replace(/\W/g, '-')
-      let refinedBookName = book.bookName.toLowerCase().replace(/\W/g, '-')
-      if (refinedTitle === refinedBookName) { continue }
+      if (isEqTitle(title, book.bookName)) { continue }
       contents.push(title)
     }
   }
@@ -110,7 +120,7 @@ const _buildBook = ($, book) => {
   $('pre').eq(-1).before(`<h3>${endStr}</h3>`)
 
   for(let i = 0; i < contents.length -1; i++) {
-    console.log(`chapter${i}`)
+    console.log(`${contents[i]}`)
     console.time('chapter calc time')
     let [start, end] = contents.slice(i, i+2)
     let paras = $(`:header:contains(${start})`).nextUntil(
@@ -130,7 +140,7 @@ const _buildBook = ($, book) => {
   }
 
   // 移除定位符
-  delete contents[contents.length-1]
+  contents.pop()
 }
 
 const _bookInfo = ($, book) => {
@@ -145,12 +155,12 @@ const _bookInfo = ($, book) => {
       bookInfo[k] = v
     }
   })
-  book.bookName = bookInfo.Title || bookInfo.titles
+  book.bookName = bookInfo.Title || bookInfo.title
   book.bookInfo = bookInfo
 }
 
-global.s = new Spider(urlMap[1].url)
-s.insQueue = [_bookInfo, _contents, _buildBook]
-s.run().then(()=>console.log('init finished'))
+// global.s = new Spider(urlMap[1].url)
+// s.insQueue = [_bookInfo, _contents, _buildBook]
+// s.run().then(()=>console.log('init finished'))
 
-module.exports = Spider
+module.exports = {Spider, urlMap}

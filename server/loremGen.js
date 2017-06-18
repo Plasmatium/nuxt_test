@@ -61,27 +61,27 @@ const bookCollection = {}
 
 module.exports = (req, res) => {
   let {q} = req.query
-  let {essayID, chptnum} = decodeQuery(q, true)
-  console.log({essayID, chptnum})
+  let {bookID, chptnum} = decodeQuery(q, true)
+  console.log({bookID, chptnum})
 
   // below is temporary code
-  if (!isNaN(Number(essayID))) {
+  if (!isNaN(Number(bookID))) {
     let chapter
-    if (isNaN(Number(essayID)) || isNaN(Number(chptnum))) {
-      errStr = `essayID or chptnum is not a number
-      essayID: ${essayID}, chptnum: ${chptnum}`
+    if (isNaN(Number(bookID)) || isNaN(Number(chptnum))) {
+      errStr = `bookID or chptnum is not a number
+      bookID: ${bookID}, chptnum: ${chptnum}`
       console.error(errStr)
       throw TypeError(errStr)
     }
 
     let book
-    if (!(essayID in bookCollection)) {
-      console.log(`Creating essay, id: ${essayID}.`)
-      book = createBook(essayID)
-      bookCollection[essayID] = book
+    if (!(bookID in bookCollection)) {
+      console.log(`Creating essay, id: ${bookID}.`)
+      book = createBook(bookID)
+      bookCollection[bookID] = book
     } else {
-      book = bookCollection[essayID]
-      console.log('hit cache: ', essayID, book.bookName)
+      book = bookCollection[bookID]
+      console.log('hit cache: ', bookID, book.bookName)
     }
 
     // assume chapter starts from chapter-one, not zero
@@ -104,7 +104,7 @@ module.exports = (req, res) => {
   } else {
     // very urgly here !!!!!!!!!!!
     // TODO: !!!
-    let b = urlMap[essayID[1]]
+    let b = urlMap[bookID[1]]
     let url = b.url
     if (bookCollection[b.name]) {
       let book = bookCollection[b.name]

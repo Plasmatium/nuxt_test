@@ -2,8 +2,8 @@
   <div id='essay-navigator' :style='calcTmpStyle' :class='clsList'
     @click.stop='clk'>
     <div id='nav'>
-      <label for="essayid">essayID:</label>
-      <input name='essayid' v-model='essayID'/>
+      <label for="bookID">bookID:</label>
+      <input name='bookID' v-model='bookID'/>
       <label for="chptnum">Chapter Number:</label>
       <input name='chptnum' v-model='chptnum'/>
       <nuxt-link :to='queryUrl' class='button--grey'>Go</nuxt-link>
@@ -23,7 +23,7 @@ export default {
   },
   data () {
     return {
-      essayID: null,
+      bookID: null,
       chptnum: null
     }
   },
@@ -47,8 +47,8 @@ export default {
       'getIDnNum'
     ]),
     queryUrl () {
-      let {essayID, chptnum} = this
-      let query = {essayID, chptnum}
+      let {bookID, chptnum} = this
+      let query = {bookID, chptnum}
       let b64Str = encodeQuery(query, this.isServer)
       let url = `/essays?q=${b64Str}`
       return url
@@ -58,8 +58,8 @@ export default {
     }
   },
   mounted () {
-    let {essayID, chptnum} = this.getIDnNum
-    this.essayID = essayID
+    let {bookID, chptnum} = this.getIDnNum
+    this.bookID = bookID
     this.chptnum = chptnum
   }
 }

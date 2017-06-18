@@ -40,8 +40,8 @@ const store = new Vuex.Store({
   state: {
     isServer: null,
 
-    currFontFamily: 'Quicksand',
-    currFontWeight: 100,
+    currFontFamily: 'Josefin Sans',
+    currFontWeight: 400,
     currQueryStr: null,
 
     currMenu: null
@@ -52,10 +52,10 @@ const store = new Vuex.Store({
     },
 
     setFont (state, {font}) {
-      state.currFontFamily = font || 'Quicksand'
+      state.currFontFamily = font || 'Josefin Sans'
     },
     setWeight (state, {weight}) {
-      state.currFontWeight = weight || 100
+      state.currFontWeight = weight || 400
     },
     setQueryStr (state, {queryStr}) {
       state.currQueryStr = queryStr
@@ -81,12 +81,12 @@ const store = new Vuex.Store({
 
     getIDnNum (state) {
       let query = decodeQuery(state.currQueryStr.q, state.isServer)
-      let {essayID, chptnum} = query
-      return {essayID, chptnum}
+      let {bookID, chptnum} = query
+      return {bookID, chptnum}
     },
 
     demoBookStartUrl (state) {
-      let query = {essayID: 200, chptnum: 10}
+      let query = {bookID: 'a1', chptnum: 1}
       return encodeQuery(query, state.isServer)
     }
   }

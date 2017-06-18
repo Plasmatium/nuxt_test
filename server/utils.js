@@ -44,6 +44,9 @@ const encodeQuery = (query, isServer) => {
  */
 const decodeQuery = (b64Str, isServer) => {
   let queryStr
+  if (isServer === undefined) {
+    throw Error('in function: decodeQuery, param: isServer is not specified!')
+  }
   if (isServer) {
     queryStr = new Buffer(b64Str, 'base64').toString()
   } else {
@@ -52,4 +55,22 @@ const decodeQuery = (b64Str, isServer) => {
   return qs.decode(queryStr)
 }
 
-module.exports = {seed, rand, randInt, encodeQuery, decodeQuery, qs}
+const isEqTitle = (title1, title2) => {
+  // 排除该目录title就是书名，有些目录第一条是书名
+  // 另外考虑到文章在录入时人为疏忽写错的内容，比如：
+  // ’和'的区别，这部分通过regexp把所有非字母替换成
+  // 短横'-'
+  title1 = title1.toLowerCase().replace(/\W/g, '-')
+  title2 = title2.toLowerCase().replace(/\W/g, '-')
+  return title1 === title2
+}
+
+module.exports = {
+  seed,
+  rand,
+  randInt,
+  encodeQuery,
+  decodeQuery,
+  qs,
+  isEqTitle
+}

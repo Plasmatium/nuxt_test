@@ -2,16 +2,16 @@
   <div>
     <h1 ref='title'>ESSAY VIEW</h1>
     <h3>Is This From Server: {{isServer || false}}</h3>
-    <h4>Total chapters count: {{essayID}}.</h4>
+    <h4>Total chapters count: {{contents.length}}.</h4>
     <h4 :style="calcBackgroundStyle">
       Current Font Family is {{currFontFamily}}</h4>
     <br>
     <h4>Book Name</h4>
-    <h2>{{bookName}}</h2>
+    <h2>{{bookInfo.Title}}</h2>
     <h4>Chapter {{chptnum}}</h4>
-    <h3>{{chptName}}</h3>
+    <h3>{{chapter.title}}</h3>
     <chapter-block
-    :paras='paras'
+    :chapter='chapter'
     :style="calcBackgroundStyle"/>
 
   </div>
@@ -35,36 +35,47 @@ export default {
     let instance = axios.create({
       proxy: {host, port}
     })
+
     store.commit('setRenderSide', {isServer})
     store.commit('setQueryStr', {queryStr: query})
 
     let data
     try {
-      ({data} = await instance.get(`/api/getdemo`, {params: query}))
+      ({data} = await instance.get(`/api/getbook`, {params: query}))
     } catch (err) {
       console.error(err)
     }
+    let {bookID, chptnum} = decodeQuery(query.q, isServer)
+    let {bookInfo, bookStats, chapter, contents} = data
 
-    let {essayID, chptnum} = decodeQuery(query.q, isServer)
-    let {
-      bookName,
-      chptName,
-      bookStats,
-      chptStats,
-      paras,
-      pvt_data
-    } = data
     return ({
       isServer,
-      essayID,
+      bookID,
       chptnum,
-      bookName,
-      chptName,
+      bookInfo,
       bookStats,
-      chptStats,
-      paras,
-      pvt_data
+      contents,
+      chapter
     })
+    // let {
+    //   bookName,
+    //   chptName,
+    //   bookStats,
+    //   chptStats,
+    //   paras,
+    //   pvt_data
+    // } = data
+    // return ({
+    //   isServer,
+    //   bookID,
+    //   chptnum,
+    //   bookName,
+    //   chptName,
+    //   bookStats,
+    //   chptStats,
+    //   paras,
+    //   pvt_data
+    // })
   },
   computed: {
     ...mapGetters([
