@@ -51,7 +51,21 @@ const store = new Vuex.Store({
   },
   mutations: {
     setActiveP (state, {activeP}) {
-      Object.assign(state, {activeP})
+      // console.time('setActiveP')
+      // 首先解除原先active：撤销class，置isActive为false
+      if (state.activeP) {
+        state.activeP.$el.removeAttribute('class')
+        state.activeP.isActive = false
+      }
+      // 然后，如果传入的不是null，那么：
+      // 设定新activeP的class和isActive
+      if (activeP) {
+        activeP.$el.setAttribute('class', 'active')
+        activeP.isActive = true
+      }
+      // 最后更新state状态
+      state.activeP = activeP
+      // console.timeEnd('setActiveP')
     },
 
     setRenderSide (state, {isServer}) {

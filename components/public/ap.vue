@@ -1,9 +1,14 @@
 <template lang="html">
-  <p
-  :class='{ active: this.$el === this.activeP }'
-  @click='pClick'>
-  {{text}}
-  </P>
+  <div @click='pClick'>
+    <p v-if='!isActive'>
+      {{rawText}}
+    </P>
+    <p v-else>
+      <span
+      v-for='word in splitText'
+      @click.stop='spanClick'>{{word}}{{' '}}</span>
+    </p>
+  </div>
 </template>
 
 <script>
@@ -12,11 +17,11 @@ import {mapState, mapMutations} from 'vuex'
 export default {
   data () {
     return {
-      isHover: false
+      isActive: false
     }
   },
   props: {
-    text: {
+    rawText: {
       type: String,
       required: true
     }
@@ -26,31 +31,42 @@ export default {
       'setActiveP'
     ]),
     pClick (e) {
-      if (this.activeP === this.$el) {
+      console.time('pClick')
+      if (this.activeP === this) {
         this.setActiveP({activeP: null})
       } else {
-        this.setActiveP({activeP: this.$el})
+        this.setActiveP({activeP: this})
       }
+      console.timeEnd('pClick')
+    },
+    spanClick (e) {
+      console.log('span click')
     }
   },
   computed: {
-    refinedText () {
-      return this.text.trim().split(/\s+/)
-    },
     ...mapState([
       'activeP'
-    ])
+    ]),
+    splitText () {
+      return this.rawText.trim().split(/\s+/)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 p {
+  margin: 0;
+}
+div {
   border-radius: 0.3em;
   box-shadow: none;
-  transition: 0.2s ease;
+  transition: 0.2s ease-in-out;
 }
-p.active {
-  box-shadow: 0.03em 0.03em 1em rgba(0, 0, 0, 0.2);
+div.active {
+  box-shadow: 0.1em 0.1em 1em rgba(0, 0, 0, 0.382);
+}
+span {
+  padding: 0;
 }
 </style>

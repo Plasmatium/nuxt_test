@@ -26,7 +26,7 @@ export default {
     paras.forEach(para => {
       // let paraDom = <p>{para}</p>
       // dom.push(paraDom)
-      dom.push(<ap text={para}> </ap>)
+      dom.push(<ap rawText={para}> </ap>)
     })
     return (
       <div>
