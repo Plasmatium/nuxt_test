@@ -1,4 +1,6 @@
 <script>
+import ap from './public/ap'
+
 export default {
   props: {
     parastyle: {
@@ -11,6 +13,9 @@ export default {
   },
   computed: {
   },
+  components: {
+    ap
+  },
   data () {
     return {
     }
@@ -21,13 +26,12 @@ export default {
     paras.forEach(para => {
       // let paraDom = <p>{para}</p>
       // dom.push(paraDom)
-      let br = <br/>
-      dom.push(para)
-      dom.push(br)
+      dom.push(<ap text={para}> </ap>)
     })
     return (
-      <div id={`chapter-${this.chptnum}`}
-        class='chapter'>{dom}</div>
+      <div>
+        {dom}
+      </div>
     )
   }
 }

@@ -44,9 +44,16 @@ const store = new Vuex.Store({
     currFontWeight: 400,
     currQueryStr: null,
 
-    currMenu: null
+    currMenu: null,
+
+    chosenWord: '',
+    activeP: null
   },
   mutations: {
+    setActiveP (state, {activeP}) {
+      Object.assign(state, {activeP})
+    },
+
     setRenderSide (state, {isServer}) {
       state.isServer = isServer
     },
