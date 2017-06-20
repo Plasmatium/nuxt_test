@@ -140,10 +140,10 @@ const _buildBook = ($, book) => {
   let contents = book.contents
 
   // 插入最后章节前的定位，this is a trick
-  let endStr = '<1=2=3=4= THE END ====>' + new Date()
+  let endStr = '!1=2=3=4= THE END ====!' + new Date()
   $.ahrefs.push(endStr)
   $('pre').eq(-1).before(`<a name="${endStr}" id="${endStr}"></a>`)
-  $(`a[name=${endStr}]`)[0].parent = {name: 'body'}
+  $(`a[name="${endStr}"]`)[0].parent = {name: 'body'}
 
   for (let i=0; i<$.ahrefs.length-1; i++) {
     let title = contents[i]
@@ -154,9 +154,8 @@ const _buildBook = ($, book) => {
 
     let start = $.ahrefs[i]
     let end = $.ahrefs[i+1]
-    let startTag = _getHighestTag($(`a[name=${start}]`))
-    if (i === 60) {debugger}
-    let endTag = _getHighestTag($(`a[name=${end}]`))
+    let startTag = _getHighestTag($(`a[name="${start}"]`))
+    let endTag = _getHighestTag($(`a[name="${end}"]`))
     let rawText = $(startTag).nextUntil(endTag)
     let textList = rawText.text().split(/\n\s*\n/)
     textList.forEach(para => {
@@ -169,34 +168,6 @@ const _buildBook = ($, book) => {
 
     console.timeEnd(title)
   }
-
-  // -------------------------
-  // let endStr = '<1=2=3=4= THE END ====>' + new Date()
-  // contents.push(endStr)
-  // $('pre').eq(-1).before(`<h3>${endStr}</h3>`)
-  // debugger
-  //
-  // for(let i = 0; i < contents.length -1; i++) {
-  //   console.log(`${contents[i]}`)
-  //   console.time('chapter calc time')
-  //   let [start, end] = contents.slice(i, i+2)
-  //   let paras = $(`:header:contains(${start})`).nextUntil(
-  //     `:header:contains(${end})`
-  //   )
-  //   // expect innerText is `paras.text()`
-  //   let chapter = new ChapterStruct(start)
-  //   let textList = paras.text().split(/\n\s*\n/)
-  //   textList.forEach(para => {
-  //     if (para) {
-  //       chapter.push(para)
-  //     }
-  //   })
-  //   chapter.seal()
-  //   book.add(chapter)
-  //   console.timeEnd('chapter calc time')
-  // }
-
-  // 移除定位符
   contents.pop()
 }
 
@@ -216,9 +187,9 @@ const _bookInfo = ($, book) => {
   book.bookInfo = bookInfo
 }
 
-console.log('****************debugging spider*********************')
-global.s = new Spider(urlMap[3])
-s.insQueue = [_bookInfo, _contents, _buildBook]
-s.run().then(()=>console.log('init finished'))
+// console.log('****************debugging spider*********************')
+// global.s = new Spider(urlMap[3])
+// s.insQueue = [_bookInfo, _contents, _buildBook]
+// s.run().then(()=>console.log('init finished'))
 
 module.exports = {Spider, urlMap}

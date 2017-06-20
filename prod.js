@@ -3,11 +3,19 @@ const app = require('./server')
 
 // confirm ip
 const os = require('os')
-let network = os.networkInterfaces()
-let interfaces = Object.values(network)[0]
-for (let itfc of interfaces) {
-  if (itfc.family.toLowerCase() === 'ipv4') {
-    process.env.HOST = itfc.address
+let network = Object.values(os.networkInterfaces())
+
+for(let adapter of network) {
+  let host = null
+  adapter.forEach(itfc => {
+    if (itfc.family.toLowerCase() !== 'ipv4') { return }
+    if (itfc.address === '127.0.0.1') { return }
+    if (itfc.address === 'localhost') { return }
+    host = itfc.address
+  })
+  if (host) {
+    process.env.HOST = host
+    break
   }
 }
 
