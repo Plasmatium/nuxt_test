@@ -16,8 +16,31 @@ const urlMap = [
   }, {
     name: `THE RETURN OF THE O'MAHONY`,
     url: 'http://www.gutenberg.org/files/54900/54900-h/54900-h.htm'
+  }, {
+    name: `THE THIRTY-NINE STEPS`,
+    url: 'http://www.gutenberg.org/files/558/558-h/558-h.htm'
+  }, {
+    name: `PRIDE AND PREJUDICE`,
+    url: 'http://www.gutenberg.org/files/1342/1342-h/1342-h.htm'
+  }, {
+    name: `SENSE AND SENSIBILITY`,
+    url: 'http://www.gutenberg.org/files/161/161-h/161-h.htm'
+  }, {
+    name: `MANSFIELD PARK`,
+    url: 'http://www.gutenberg.org/files/141/141-h/141-h.htm'
+  }, {
+    name: `EMMA`,
+    url: 'http://www.gutenberg.org/files/158/158-h/158-h.htm'
   }
 ]
+
+const _getHighestTag = (tag) => {
+  let rslt = tag[0]
+  while (rslt.parent.name !== 'body') {
+    rslt = rslt.parent
+  }
+  return rslt
+}
 
 // ----------------------------------------------------------------
 
@@ -99,13 +122,15 @@ const _contents = ($, book) => {
     throw Error('No anchors found in contents')
   }
 
-  let contents = [];
+  let contents = []
+  $.ahrefs = []
   for (let idx=0; idx<anchors.length; idx++) {
     // 有时候title文字里面有换行和多余空格，此处全部正则替换为一个空格
     let title = anchors.eq(idx).text().trim().replace(/\s+/g, ' ')
     if (title) {
       if (isEqTitle(title, book.bookName)) { continue }
       contents.push(title)
+      $.ahrefs.push(anchors[idx].attribs.href.slice(1))
     }
   }
   book.contents = contents
@@ -114,30 +139,62 @@ const _contents = ($, book) => {
 const _buildBook = ($, book) => {
   let contents = book.contents
 
-  // 插入最后章节前的定位
+  // 插入最后章节前的定位，this is a trick
   let endStr = '<1=2=3=4= THE END ====>' + new Date()
-  contents.push(endStr)
-  $('pre').eq(-1).before(`<h3>${endStr}</h3>`)
+  $.ahrefs.push(endStr)
+  $('pre').eq(-1).before(`<a name="${endStr}" id="${endStr}"></a>`)
+  $(`a[name=${endStr}]`)[0].parent = {name: 'body'}
 
-  for(let i = 0; i < contents.length -1; i++) {
-    console.log(`${contents[i]}`)
-    console.time('chapter calc time')
-    let [start, end] = contents.slice(i, i+2)
-    let paras = $(`:header:contains(${start})`).nextUntil(
-      `:header:contains(${end})`
-    )
-    // expect innerText is `paras.text()`
-    let chapter = new ChapterStruct(start)
-    let textList = paras.text().split(/\n\s*\n/)
+  for (let i=0; i<$.ahrefs.length-1; i++) {
+    let title = contents[i]
+    let prompStr = `dealing with ${title}`
+    console.time(title)
+
+    let chapter = new ChapterStruct(title)
+
+    let start = $.ahrefs[i]
+    let end = $.ahrefs[i+1]
+    let startTag = _getHighestTag($(`a[name=${start}]`))
+    if (i === 60) {debugger}
+    let endTag = _getHighestTag($(`a[name=${end}]`))
+    let rawText = $(startTag).nextUntil(endTag)
+    let textList = rawText.text().split(/\n\s*\n/)
     textList.forEach(para => {
-      if (para) {
-        chapter.push(para)
-      }
+      if (!para.trim()) { return }
+      if (isEqTitle(para.trim(), title.trim())) { return }
+      chapter.push(para)
     })
     chapter.seal()
     book.add(chapter)
-    console.timeEnd('chapter calc time')
+
+    console.timeEnd(title)
   }
+
+  // -------------------------
+  // let endStr = '<1=2=3=4= THE END ====>' + new Date()
+  // contents.push(endStr)
+  // $('pre').eq(-1).before(`<h3>${endStr}</h3>`)
+  // debugger
+  //
+  // for(let i = 0; i < contents.length -1; i++) {
+  //   console.log(`${contents[i]}`)
+  //   console.time('chapter calc time')
+  //   let [start, end] = contents.slice(i, i+2)
+  //   let paras = $(`:header:contains(${start})`).nextUntil(
+  //     `:header:contains(${end})`
+  //   )
+  //   // expect innerText is `paras.text()`
+  //   let chapter = new ChapterStruct(start)
+  //   let textList = paras.text().split(/\n\s*\n/)
+  //   textList.forEach(para => {
+  //     if (para) {
+  //       chapter.push(para)
+  //     }
+  //   })
+  //   chapter.seal()
+  //   book.add(chapter)
+  //   console.timeEnd('chapter calc time')
+  // }
 
   // 移除定位符
   contents.pop()
@@ -159,8 +216,9 @@ const _bookInfo = ($, book) => {
   book.bookInfo = bookInfo
 }
 
-// global.s = new Spider(urlMap[1].url)
-// s.insQueue = [_bookInfo, _contents, _buildBook]
-// s.run().then(()=>console.log('init finished'))
+console.log('****************debugging spider*********************')
+global.s = new Spider(urlMap[3])
+s.insQueue = [_bookInfo, _contents, _buildBook]
+s.run().then(()=>console.log('init finished'))
 
 module.exports = {Spider, urlMap}
