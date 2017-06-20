@@ -30,8 +30,8 @@ export default {
     }
   },
   asyncData: async ({store, isServer, query, isDev}) => {
-    let port = isDev ? 3000 : 3000 // can't run on 80 on mac
-    let host = isDev ? 'localhost' : '192.168.1.30'
+    let port = isDev ? 3000 : process.env.PORT
+    let host = isDev ? 'localhost' : process.env.HOST
     let instance = axios.create({
       proxy: {host, port}
     })
@@ -57,25 +57,6 @@ export default {
       contents,
       chapter
     })
-    // let {
-    //   bookName,
-    //   chptName,
-    //   bookStats,
-    //   chptStats,
-    //   paras,
-    //   pvt_data
-    // } = data
-    // return ({
-    //   isServer,
-    //   bookID,
-    //   chptnum,
-    //   bookName,
-    //   chptName,
-    //   bookStats,
-    //   chptStats,
-    //   paras,
-    //   pvt_data
-    // })
   },
   computed: {
     ...mapGetters([
