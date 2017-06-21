@@ -1,14 +1,12 @@
 <template lang="html">
   <div id='essay-navigator' :style='calcTmpStyle' :class='clsList'
     @click.stop='clk'>
-    <div id='nav'>
-      <label for="bookID">bookID:</label>
-      <input name='bookID' v-model='bookID'/>
-      <label for="chptnum">Chapter Number:</label>
-      <input name='chptnum' v-model='chptnum'/>
-      <nuxt-link :to='queryUrl' class='button--grey'>Go</nuxt-link>
-      <expander />
-    </div>
+    <label for="bookID">bookID:</label>
+    <input name='bookID' v-model='bookID'/>
+    <label for="chptnum">Chapter Number:</label>
+    <input name='chptnum' v-model='chptnum'/>
+    <nuxt-link :to='queryUrl' class='button--grey'>Go</nuxt-link>
+    <expander />
   </div>
 </template>
 
@@ -32,7 +30,9 @@ export default {
       'showMenu'
     ]),
     clk (e) {
-      this.showMenu({menu: this})
+      if (e.target === this.$el) {
+        this.showMenu({menu: this})
+      }
     }
   },
   computed: {
