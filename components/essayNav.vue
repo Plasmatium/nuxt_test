@@ -1,6 +1,9 @@
 <template lang="html">
-  <div id='essay-navigator' :style='calcTmpStyle' :class='clsList'
-    @click.stop='clk'>
+  <div
+  id='essay-navigator'
+  :style='calcTmpStyle'
+  :class='clsList'
+  v-expandOnClick>
     <label for="bookID">bookID:</label>
     <input name='bookID' v-model='bookID'/>
     <label for="chptnum">Chapter Number:</label>
@@ -28,12 +31,7 @@ export default {
   methods: {
     ...mapMutations([
       'showMenu'
-    ]),
-    clk (e) {
-      if (e.target === this.$el) {
-        this.showMenu({menu: this})
-      }
-    }
+    ])
   },
   computed: {
     ...mapState([
@@ -54,7 +52,7 @@ export default {
       return url
     },
     clsList () {
-      return (this.currMenu === this) ? ['show'] : null
+      return { expand: this.currMenu === this.$el }
     }
   },
   mounted () {
@@ -77,11 +75,7 @@ export default {
   box-shadow: 0.3px 0.3px 3px rgba(0, 0, 0, 0.382);
   transition: height 0.2s ease-in;
 }
-#essay-navigator.show {
+#essay-navigator.expand {
   height: 62vh;
-}
-#nav {
-  position: relative;
-  margin-top: 0;
 }
 </style>

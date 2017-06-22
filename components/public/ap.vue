@@ -71,7 +71,7 @@ p {
   transition: 0.2s ease-in-out;
 }
 p.active {
-  box-shadow: 0.1em 0.1em 1em rgba(0, 0, 0, 0.382);
+  box-shadow: .01em .01em .2em rgba(0,0,0,.382);
 }
 span {
   padding: 0;

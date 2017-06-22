@@ -1,10 +1,9 @@
 <template>
-  <div id="layout" @click="outerClick"
+  <div id="layout" v-expandOnClick
   :style="calcTmpStyle({font: menuFont, weight: 100})">
-    <div id="sidebar" :class="sidebarClass" @click.stop="innerClick">
+    <div id="sidebar" :class="sidebarClass">
       <h5 v-once style="margin-top: 0;"
-      class="button--grey"
-      @click.stop="toggleMenu">Menu</h5>
+      class="button--grey">Menu</h5>
       <h2>Pick a Font</h2>
       <ul v-once id="font-list">
         <li v-for="font in fontList">
@@ -39,8 +38,7 @@
     },
     data () {
       return {
-        fweight: '100',
-        sidebarClass: ['shrink']
+        fweight: '100'
       }
     },
     methods: {
@@ -48,28 +46,18 @@
         'setFont',
         'setWeight',
         'showMenu'
-      ]),
-      outerClick (e) {
-        this.showMenu({menu: this})
-      },
-      innerClick (e) {
-        this.sidebarClass = ['expand']
-      },
-      toggleMenu (e) {
-        if (this.sidebarClass.includes('shrink')) {
-          this.sidebarClass = ['expand']
-        } else {
-          this.sidebarClass = ['shrink']
-        }
-      }
+      ])
     },
     computed: {
-      ...mapState([]),
+      ...mapState(['currMenu']),
       ...mapGetters([
         'fontList',
         'calcTmpStyle',
         'menuFont'
-      ])
+      ]),
+      sidebarClass () {
+        return 'err'
+      }
     }
   }
 </script>
@@ -122,6 +110,7 @@ h1.title {
   padding-top: 0;
   left: 0;
   top: 0;
+  height: 2em;
   position: fixed;
   background-color: rgba(255, 255, 255, 0.97);
   box-shadow: 0.3px 0.3px 3px rgba(0, 0, 0, 0.382);
@@ -130,9 +119,6 @@ h1.title {
   z-index: 10;
 }
 
-.shrink {
-  height: 2em;
-}
 .expand {
   height: 62vh;
 }
