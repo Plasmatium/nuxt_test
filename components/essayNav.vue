@@ -2,7 +2,6 @@
   <div
   id='essay-navigator'
   :style='calcTmpStyle'
-  :class='clsList'
   v-expandOnClick>
     <label for="bookID">bookID:</label>
     <input name='bookID' v-model='bookID'/>
@@ -15,10 +14,12 @@
 
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
-import expander from './public/expander'
 import {encodeQuery} from '~/server/utils'
+import expander from './public/expander'
+import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
 
 export default {
+  mixins: [expandOnClick],
   components: {
     expander
   },
@@ -29,13 +30,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
-      'showMenu'
-    ])
+    ...mapMutations([])
   },
   computed: {
     ...mapState([
-      'currMenu',
       'currQueryStr',
       'isServer'
     ]),
@@ -50,9 +48,6 @@ export default {
       let b64Str = encodeQuery(query, this.isServer)
       let url = `/essays?q=${b64Str}`
       return url
-    },
-    clsList () {
-      return { expand: this.currMenu === this.$el }
     }
   },
   mounted () {

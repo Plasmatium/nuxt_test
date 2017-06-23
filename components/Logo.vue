@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .VueToNuxtLogo
 {
   display: inline-block;

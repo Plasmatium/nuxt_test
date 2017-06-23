@@ -1,7 +1,7 @@
 <template>
   <div id="layout" v-expandOnClick
   :style="calcTmpStyle({font: menuFont, weight: 100})">
-    <div id="sidebar" :class="sidebarClass">
+    <!-- <div id="sidebar" :class="sidebarClass">
       <h5 v-once style="margin-top: 0;"
       class="button--grey">Menu</h5>
       <h2>Pick a Font</h2>
@@ -22,7 +22,8 @@
         @click.prevent="setWeight({weight: fweight})">
           Set Font Weight to {{fweight}}</a>
       </div>
-    </div>
+    </div> -->
+    <stats-menu></stats-menu>
     <nuxt />
     <essay-nav></essay-nav>
   </div>
@@ -31,10 +32,14 @@
 <script>
   import {mapGetters, mapMutations, mapState} from 'vuex'
   import essayNav from '~components/essayNav'
+  import menu from '~components/menu'
+  import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
 
   export default {
+    mixins: [expandOnClick],
     components: {
-      'essay-nav': essayNav
+      'essay-nav': essayNav,
+      'stats-menu': menu
     },
     data () {
       return {
@@ -62,7 +67,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 /* IDEA:  */
 h1.title {
   color: orange;
@@ -117,10 +122,6 @@ h1.title {
   overflow: scroll;
   transition: height 0.2s ease-in;
   z-index: 10;
-}
-
-.expand {
-  height: 62vh;
 }
 
 #content {
