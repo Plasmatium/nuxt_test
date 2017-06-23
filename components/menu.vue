@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="menu" v-expandOnClick>
+    <div v-closeExpand><slot name="close"></slot></div>
     test menu
-    <div v-closeExpand>x</div>
     <div v-exceptExpand>E</div>
     <div>others</div>
   </div>

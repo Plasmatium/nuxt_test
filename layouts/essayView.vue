@@ -23,7 +23,9 @@
           Set Font Weight to {{fweight}}</a>
       </div>
     </div> -->
-    <stats-menu></stats-menu>
+    <stats-menu>
+      <div slot="close">XXX</div>
+    </stats-menu>
     <nuxt />
     <essay-nav></essay-nav>
   </div>

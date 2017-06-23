@@ -36,9 +36,10 @@ export default {
       bind: function (el, binding, vnode) {
         let vm = vnode.context
         let {$store, exceptList, closeList} = vm
-
+        // TODO: here, e.target maybe contained by el in closeList or exceptList
         let handle = (e) => {
           e.stopPropagation()
+          debugger
           if (exceptList.includes(e.target)) {
             return
           } else if (closeList.includes(e.target)) {
@@ -58,6 +59,7 @@ export default {
 
     closeExpand: {
       bind: function (el, binding, vnode) {
+        debugger
         let vm = vnode.context
         let {closeList} = vm
         closeList.push(el)
