@@ -23,9 +23,8 @@
           Set Font Weight to {{fweight}}</a>
       </div>
     </div> -->
-    <stats-menu>
-      <div slot="close">XXX</div>
-    </stats-menu>
+    <option-menu>
+    </option-menu>
     <nuxt />
     <essay-nav></essay-nav>
   </div>
@@ -34,14 +33,16 @@
 <script>
   import {mapGetters, mapMutations, mapState} from 'vuex'
   import essayNav from '~components/essayNav'
-  import menu from '~components/menu'
+  import optionMenu from '~components/public/optionMenu'
+  import baseMenu from '~components/public/baseMenu'
   import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
 
   export default {
     mixins: [expandOnClick],
     components: {
       'essay-nav': essayNav,
-      'stats-menu': menu
+      'option-menu': optionMenu,
+      baseMenu
     },
     data () {
       return {

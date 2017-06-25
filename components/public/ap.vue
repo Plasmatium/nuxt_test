@@ -69,9 +69,12 @@ p {
   border-radius: 0.3em;
   box-shadow: none;
   transition: 0.2s ease-in-out;
+
+  padding: 0.618em;
+  margin: 0.382em;
 }
 p.active {
-  box-shadow: .01em .01em .2em rgba(0,0,0,.382);
+  box-shadow: .01em .01em .618em rgba(0,0,0,.382);
 }
 span {
   padding: 0;

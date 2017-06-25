@@ -39,7 +39,6 @@ export default {
         // TODO: here, e.target maybe contained by el in closeList or exceptList
         let handle = (e) => {
           e.stopPropagation()
-          debugger
           if (exceptList.includes(e.target)) {
             return
           } else if (closeList.includes(e.target)) {
@@ -53,13 +52,12 @@ export default {
         el.__expandOnClickHandler__ = handle
       },
       unbind: function (el) {
-        el.removeEventListener('click')
+        el.removeEventListener('click', el.__expandOnClickHandler__)
       }
     },
 
     closeExpand: {
       bind: function (el, binding, vnode) {
-        debugger
         let vm = vnode.context
         let {closeList} = vm
         closeList.push(el)
