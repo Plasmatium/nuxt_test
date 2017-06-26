@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h3 {
-  font-size: 1.62em;
+* {
+  color: purple;
 }
 </style>

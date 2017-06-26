@@ -62,18 +62,13 @@ export default {
       return this.currSheet.data.attrs.ttl
     },
     sliderContentClass () {
-      let cls = 'slider-content' + (this.fading ? ' fade-blur' : '')
-      console.log(cls)
-      return cls
+      return 'slider-content' + (this.fading ? ' fade-blur' : '')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-* {
-    color: #777;
-}
 div.slider {
   display: flex;
   flex-direction: column;

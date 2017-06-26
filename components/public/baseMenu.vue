@@ -36,7 +36,7 @@ export default {
   top: 1.618em;
   left: 10%;
 
-  color: purple;
+  opacity: 0.382;
   background-color: rgba(0,0,0,0);
 
   overflow: hidden;
@@ -62,6 +62,7 @@ export default {
   height: 61.8%;
   padding: 2%;
 
+  opacity: 1;
   background-color: rgba(255,255,255,.96);
 
   border-radius: .3em;
