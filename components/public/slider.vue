@@ -20,26 +20,38 @@ export default {
       })
     }</div>)
 
-    let titleDom = <h2>{this.currTitle}</h2>
+    let titleDom = <h2 class={this.sliderContentClass}>{this.currTitle}</h2>
+    let sheetDom = <div class={this.sliderContentClass}>{this.currSheet}</div>
 
-    return (<div>
-      {[titleDom, buttonGroupDom, this.currSheet]}
+    return (<div class="slider">
+      {[titleDom, buttonGroupDom, sheetDom]}
     </div>)
   },
   methods: {
     selectSheet (idx) {
       return (e) => {
-        // TODO: use a series of setTimeout to control animation step
-        // 1. set class="fade-blur" to currSheet & currTitle immediately
-        // 2. this.currSheetIdx = idx, 0.1s delay.
-        // 3. set class="" to currSheet & currTitle, 0.2s delay.
-        setTimeout(() => { this.currSheetIdx = idx }, 1000)
+        if (this.sliding) { return }
+        if (this.currSheetIdx === idx) { return }
+
+        this.sliding = true
+        this.fading = true
+
+        setTimeout(() => {
+          this.fading = false
+          this.currSheetIdx = idx
+        }, 500)
+
+        setTimeout(() => {
+          this.sliding = false
+        }, 1000)
       }
     }
   },
   data () {
     return {
-      currSheetIdx: 0
+      currSheetIdx: 0,
+      sliding: false,
+      fading: false
     }
   },
   computed: {
@@ -48,16 +60,36 @@ export default {
     },
     currTitle () {
       return this.currSheet.data.attrs.ttl
+    },
+    sliderContentClass () {
+      let cls = 'slider-content' + (this.fading ? ' fade-blur' : '')
+      console.log(cls)
+      return cls
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+* {
+    color: #777;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0
+div.slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h2 {
+  font-size: 1.62em;
+}
+.slider-content {
+  margin: 1em;
+  text-shadow: 0 0 0 #777;
+  transition: .5s ease-in-out;
+}
+
+.fade-blur {
+  opacity: 0;
+  text-shadow: 0 0 1em #777;
 }
 </style>

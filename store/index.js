@@ -101,6 +101,7 @@ const store = new Vuex.Store({
     },
 
     getIDnNum (state) {
+      if (!state.currQueryStr) { return {bookID: 0, chptnum: 0} }
       let query = decodeQuery(state.currQueryStr.q, state.isServer)
       let {bookID, chptnum} = query
       return {bookID, chptnum}
