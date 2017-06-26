@@ -1,6 +1,7 @@
 // inject extra fonts
 const axios = require('axios')
 const fs = require('fs')
+const compression = require('compression')
 
 if (!fs.readdirSync('./assets/refined_fonts').includes('index.js')) {
   let fileList = fs.readdirSync('./assets/refined_fonts/scss/')
@@ -28,6 +29,7 @@ if (!fs.readdirSync('./assets/refined_fonts/google/')) {
 
 const express = require('express')
 app = express()
+app.use(compression())
 
 // -- app.use middleware injection --
 // get book

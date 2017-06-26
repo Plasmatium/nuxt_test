@@ -1,8 +1,6 @@
 const Nuxt = require('nuxt')
 const app = require('./server')
-const compression = require('compression')
 
-app.use(compression())
 // confirm ip
 const os = require('os')
 let network = Object.values(os.networkInterfaces())
