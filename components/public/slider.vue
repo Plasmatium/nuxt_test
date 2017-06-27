@@ -14,7 +14,7 @@ export default {
       icon.map((icn, idx) => {
         return (<button
           type="button"
-          class="btn btn-secondary"
+          class={'btn btn-secondary' + (this.currSheetIdx === idx ? ' selected' : '')}
           onClick={this.selectSheet(idx)}>{icn}
         </button>)
       })
@@ -39,11 +39,11 @@ export default {
         setTimeout(() => {
           this.fading = false
           this.currSheetIdx = idx
-        }, 500)
+        }, 350)
 
         setTimeout(() => {
           this.sliding = false
-        }, 1000)
+        }, 700)
       }
     }
   },
@@ -79,12 +79,17 @@ h2 {
 }
 .slider-content {
   margin: 1em;
-  text-shadow: 0 0 0 #777;
-  transition: .5s ease-in-out;
+  text-shadow: 0 0 0;
+  transition: .35s ease-in-out;
 }
-
+.btn-group .btn {
+  color: inherit;
+}
 .fade-blur {
   opacity: 0;
-  text-shadow: 0 0 1em #777;
+  text-shadow: 0 0 1em;
+}
+.selected {
+  text-shadow: 0 0 .2em;
 }
 </style>
