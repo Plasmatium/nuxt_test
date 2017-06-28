@@ -24,10 +24,12 @@ const _getChptStats = (paras) => {
       if (word !== word.toUpperCase()) {
         word = word.toLowerCase()
       }
-      if (!(word in rslt.freq)) {
-        rslt.freq[word] = 1
+      // avoid word is the same as a property of an object
+      let $w_word = '$w_' + word
+      if (!(rslt[$w_word])) {
+        rslt.freq[$w_word] = 1
       } else {
-        rslt.freq[word]++
+        rslt.freq[$w_word]++
       }
     })
   })
@@ -58,11 +60,12 @@ const ChapterStruct = class {
     ['parasCount', 'wordsCount', 'charsCount'].forEach(key => {
       totalStats[key] += this.stats[key]
     })
-    Object.entries(this.stats.freq).forEach(([word, count]) => {
-      if (totalStats.freq[word] === undefined) {
-        totalStats.freq[word] += count
+    debugger
+    Object.entries(this.stats.freq).forEach(([$w_word, count]) => {
+      if (totalStats.freq[$w_word] === undefined) {
+        totalStats.freq[$w_word] = count
       } else {
-        totalStats.freq[word] = count
+        totalStats.freq[$w_word] += count
       }
     })
   }

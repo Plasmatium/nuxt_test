@@ -1,5 +1,6 @@
 <script>
 import ap from './public/ap'
+import {mapState} from 'vuex'
 
 export default {
   props: {
@@ -12,6 +13,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['currMainTextStyle'])
   },
   components: {
     ap
@@ -29,7 +31,7 @@ export default {
       dom.push(<ap rawText={para}> </ap>)
     })
     return (
-      <div>
+      <div style={this.currMainTextStyle}>
         {dom}
       </div>
     )

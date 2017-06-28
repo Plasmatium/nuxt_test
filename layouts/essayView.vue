@@ -1,28 +1,6 @@
 <template>
   <div id="layout" v-expandOnClick
   :style="calcTmpStyle({font: menuFont, weight: 100})">
-    <!-- <div id="sidebar" :class="sidebarClass">
-      <h5 v-once style="margin-top: 0;"
-      class="button--grey">Menu</h5>
-      <h2>Pick a Font</h2>
-      <ul v-once id="font-list">
-        <li v-for="font in fontList">
-          <a :style='calcTmpStyle({font})'
-          class='button--green'
-          href="#"
-          @click.prevent="setFont({font})">
-            {{font}}
-          </a>
-        </li>
-      </ul>
-      <div>
-        <input type="text" name="" id="" v-model="fweight">
-        <a href="#"
-        class="button--green"
-        @click.prevent="setWeight({weight: fweight})">
-          Set Font Weight to {{fweight}}</a>
-      </div>
-    </div> -->
     <option-menu>
     </option-menu>
     <nuxt />
@@ -33,7 +11,7 @@
 <script>
   import {mapGetters, mapMutations, mapState} from 'vuex'
   import essayNav from '~components/essayNav'
-  import optionMenu from '~components/public/optionMenu'
+  import optionMenu from '~components/optionMenu'
   import baseMenu from '~components/public/baseMenu'
   import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
 

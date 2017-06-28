@@ -42,6 +42,13 @@ const store = new Vuex.Store({
 
     currFontFamily: 'Josefin Sans',
     currFontWeight: 400,
+
+    // ----- options ---------
+    currMenuStyle: '',
+    currTitleStyle: '',
+    currMainTextStyle: '',
+    // -----------------------
+
     currQueryStr: null,
 
     currMenu: null,
@@ -83,6 +90,13 @@ const store = new Vuex.Store({
     },
     showMenu (state, {menu}) {
       state.currMenu = menu
+    },
+
+    setStyle (state, {target, style}) {
+      let styleStr = Object.entries(style).map(([styleKey, styleVal]) => {
+        return `${styleKey}:${styleVal}`
+      }).join(';')
+      state[target] = styleStr
     }
   },
   getters: {

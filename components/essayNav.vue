@@ -8,20 +8,17 @@
     <label for="chptnum">Chapter Number:</label>
     <input name='chptnum' v-model='chptnum'/>
     <nuxt-link :to='queryUrl' class='button--grey'>Go</nuxt-link>
-    <expander />
   </div>
 </template>
 
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import {encodeQuery} from '~/server/utils'
-import expander from './public/expander'
 import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
 
 export default {
   mixins: [expandOnClick],
   components: {
-    expander
   },
   data () {
     return {

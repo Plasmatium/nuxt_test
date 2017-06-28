@@ -3,16 +3,13 @@
     <h1 ref='title'>ESSAY VIEW</h1>
     <h3>Is This From Server: {{isServer || false}}</h3>
     <h4>Total chapters count: {{contents.length}}.</h4>
-    <h4 :style="calcBackgroundStyle">
-      Current Font Family is {{currFontFamily}}</h4>
     <br>
     <h4>Book Name</h4>
     <h2>{{bookInfo.Title}}</h2>
     <h4>Chapter {{chptnum}}</h4>
     <h3>{{chapter.title}}</h3>
     <chapter-block
-    :chapter='chapter'
-    :style="calcBackgroundStyle"/>
+    :chapter='chapter'/>
 
   </div>
 </template>
@@ -60,7 +57,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'calcBackgroundStyle',
       'getIDnNum'
     ]),
     ...mapState([
