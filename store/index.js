@@ -47,6 +47,7 @@ const store = new Vuex.Store({
     currMenuStyle: '',
     currTitleStyle: '',
     currMainTextStyle: '',
+    currBoardStyle: '',
     // -----------------------
 
     currQueryStr: null,
@@ -96,6 +97,9 @@ const store = new Vuex.Store({
       let styleStr = Object.entries(style).map(([styleKey, styleVal]) => {
         return `${styleKey}:${styleVal}`
       }).join(';')
+      if (!state[target]) {
+        console.error(`state has no property named "${target}"`)
+      }
       state[target] = styleStr
     }
   },

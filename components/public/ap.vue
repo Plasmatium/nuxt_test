@@ -25,7 +25,10 @@ export default {
         return <span>{word + ' '}</span>
       })
     }
-    return <p onClick={this.pClick}>{dom}</p>
+    return (
+      <p onClick={this.pClick} style={this.isActive ? this.currBoardStyle : {}}>
+        {dom}</p>
+    )
   },
   data () {
     return {
@@ -56,9 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'activeP'
-    ])
+    ...mapState(['activeP', 'currBoardStyle'])
   }
 }
 </script>

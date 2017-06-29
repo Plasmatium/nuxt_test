@@ -4,15 +4,17 @@
     <i class="fa fa-power-off close-icon" v-closeExpand></i>
     <div slot="main-panel">
       <slider>
-        <i class="fa fa-bars" slot="icon"></i>
         <i class="fa fa-file-text-o" slot="icon"></i>
         <i class="fa fa-paragraph" slot="icon"></i>
+        <i class="fa fa-bars" slot="icon"></i>
+        <i class="fa fa-clone" slot="icon"></i>
 
+        <p slot="sheet" ttl="Main Text">asdf</p>
+        <p slot="sheet" ttl="Title">fdsa</p>
         <div slot="sheet" ttl="Menu">
           menu fonts
         </div>
-        <p slot="sheet" ttl="Main Text">asdf</p>
-        <p slot="sheet" ttl="Title">fdsa</p>
+        <p slot="sheet" ttl="Board">fdsa</p>
       </slider>
     </div>
   </baseMenu>
