@@ -28,7 +28,7 @@ if (!fs.readdirSync('./assets/refined_fonts/google/')) {
 }
 
 const express = require('express')
-app = express()
+let app = express()
 app.use(compression())
 
 // -- app.use middleware injection --
