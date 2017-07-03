@@ -24,6 +24,7 @@
 import baseMenu from '~components/public/baseMenu.vue'
 import slider from '~components/public/slider.vue'
 import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
+// import clickoutside from '~/functionalComponents/clickOutside'
 import {mapGetters} from 'vuex'
 
 export default {
@@ -34,6 +35,11 @@ export default {
   },
   computed: {
     ...mapGetters(['fontList'])
+  },
+  methods: {
+    handler (e) {
+      console.log(e)
+    }
   }
 }
 </script>

@@ -1,8 +1,9 @@
 <template lang="html">
-  <div
+  <div :class="classList"
   id='essay-navigator'
   :style='calcTmpStyle'
-  v-expandOnClick>
+  v-clickoutside="shrink"
+  @click="expand">
     <label for="bookID">bookID:</label>
     <input name='bookID' v-model='bookID'/>
     <label for="chptnum">Chapter Number:</label>
@@ -14,20 +15,27 @@
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import {encodeQuery} from '~/server/utils'
-import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
+import clickoutside from '~/functionalComponents/clickOutside'
 
 export default {
-  mixins: [expandOnClick],
+  directives: {clickoutside},
   components: {
   },
   data () {
     return {
       bookID: null,
-      chptnum: null
+      chptnum: null,
+      classList: {expand: false}
     }
   },
   methods: {
-    ...mapMutations([])
+    ...mapMutations([]),
+    shrink (e) {
+      this.classList.expand = false
+    },
+    expand (e) {
+      this.classList.expand = true
+    }
   },
   computed: {
     ...mapState([

@@ -28,6 +28,9 @@ const booklist = [
   }, {
     name: `EMMA`,
     url: 'http://www.gutenberg.org/files/158/158-h/158-h.htm'
+  }, {
+    name: `BLACK BEAUTY`,
+    url: 'http://www.gutenberg.org/files/271/271-h/271-h.htm'
   }
 ]
 
