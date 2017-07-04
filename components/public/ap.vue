@@ -1,16 +1,3 @@
-<!-- <template lang="html">
-  <div @click='pClick'>
-    <p v-if='!isActive'>
-      {{rawText}}
-    </P>
-    <p v-else>
-      <span
-      v-for='word in splitText'
-      @click.stop='spanClick'>{{word}}{{' '}}</span>
-    </p>
-  </div>
-</template> -->
-
 <script>
 import {mapState, mapMutations} from 'vuex'
 

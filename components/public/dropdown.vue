@@ -23,11 +23,11 @@ export default {
     }
   },
   mounted () {
-    debugger
     let items = this.$slots['dropdown-items']
     items.forEach(vnode => {
       let bind = expandOnClick.directives.closeExpand.bind
-      bind(vnode.elm, null, vnode) // vnode.context.closeList is not defined
+      debugger
+      bind(vnode.elm, null, {context: this})
     })
   }
 }

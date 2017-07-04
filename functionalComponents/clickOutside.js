@@ -30,6 +30,7 @@ const globalHandler = (e) => {
 export default {
   bind: function (el, binding, vnode) {
     // TODO: move 'helper' into $store
+
     let store = vnode.context.$store
     if (!store.state.moduleclickOutside) {
       store.registerModule('moduleclickOutside', moduleclickOutside)
