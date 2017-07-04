@@ -1,8 +1,20 @@
 <template>
-  <div id="layout" v-expandOnClick
+  <div id="layout"
   :style="calcTmpStyle({font: menuFont, weight: 100})">
     <option-menu>
     </option-menu>
+    <dropdown style="position: fixed">
+      <a
+      slot="dropdown-button"
+      class="btn btn-secondary dropdown-toggle"
+      role="button"
+      href="#">
+        Font List
+      </a>
+      <a class="dropdown-item" href="#" slot="dropdown-items">Font 1</a>
+      <a class="dropdown-item" href="#" slot="dropdown-items">Font 2</a>
+      <a class="dropdown-item" href="#" slot="dropdown-items">Font 3</a>
+    </dropdown>
     <nuxt />
     <essay-nav></essay-nav>
   </div>
@@ -13,14 +25,15 @@
   import essayNav from '~components/essayNav'
   import optionMenu from '~components/optionMenu'
   import baseMenu from '~components/public/baseMenu'
-  import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
+
+  import dropdown from '~components/public/dropdown'
 
   export default {
-    mixins: [expandOnClick],
     components: {
       'essay-nav': essayNav,
       'option-menu': optionMenu,
-      baseMenu
+      baseMenu,
+      dropdown
     },
     data () {
       return {

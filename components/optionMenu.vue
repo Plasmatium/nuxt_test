@@ -1,5 +1,5 @@
 <template lang="html">
-  <baseMenu v-expandOnClick id="option-menu" v-clickoutside="handler">
+  <baseMenu v-expandOnClick id="option-menu" ref="root">
     <i class="fa fa-cog menu-icon" slot="menu-icon"></i>
     <i class="fa fa-power-off close-icon" v-closeExpand></i>
     <div slot="main-panel">
@@ -24,12 +24,10 @@
 import baseMenu from '~components/public/baseMenu.vue'
 import slider from '~components/public/slider.vue'
 import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
-import clickoutside from '~/functionalComponents/clickOutside'
 import {mapGetters} from 'vuex'
 
 export default {
   mixins: [expandOnClick],
-  directives: {clickoutside},
   components: {
     baseMenu,
     slider
@@ -38,9 +36,6 @@ export default {
     ...mapGetters(['fontList'])
   },
   methods: {
-    handler (e) {
-      console.log(e)
-    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div :class="classList"
   id='essay-navigator'
   :style='calcTmpStyle'
-  v-clickoutside="shrink"
+  v-clickOutside="shrink"
   @click="expand">
     <label for="bookID">bookID:</label>
     <input name='bookID' v-model='bookID'/>
@@ -15,10 +15,10 @@
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import {encodeQuery} from '~/server/utils'
-import clickoutside from '~/functionalComponents/clickOutside'
+import clickOutside from '~/functionalComponents/clickOutside'
 
 export default {
-  directives: {clickoutside},
+  directives: {clickOutside},
   components: {
   },
   data () {

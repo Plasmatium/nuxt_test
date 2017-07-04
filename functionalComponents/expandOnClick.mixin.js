@@ -1,7 +1,4 @@
-// This mixin implement the behavior when click inside or outside of an element
-// click to expand, and click outside or specified close-element to shrink
-// use v-expandOnClick on the root node in .vue file
-import {mapState, mapMutations} from 'vuex'
+import clickOutside from '~/functionalComponents/clickOutside'
 
 // This code is jQuery's
 function addClass (elem, value) {
@@ -35,24 +32,43 @@ export default {
     expandOnClick: {
       bind: function (el, binding, vnode) {
         let vm = vnode.context
-        let {$store, exceptList, closeList} = vm
-        // TODO: here, e.target maybe contained by el in closeList or exceptList
-        let handle = (e) => {
-          e.stopPropagation()
-          if (exceptList.includes(e.target)) {
-            return
-          } else if (closeList.includes(e.target)) {
-            $store.commit('showMenu', {menu: null})
-          } else if (el.contains(e.target)) {
-            $store.commit('showMenu', {menu: el})
-          }
+        let {exceptList, closeList} = vm
+        let expandClassName = binding.value || 'expand'
+        let value = (e) => {
+          // insert click outside handler
+          // which is remove expandClassName
+          removeClass(el, expandClassName)
+        }
+        clickOutside.bind(el, {value}, vnode)
+
+        // add onClick to expand
+        // avoid exceptList & closeList
+        const expandHandler = (e) => {
+          if (exceptList.includes(e.target)) { return false }
+          if (closeList.includes(e.target)) { return false }
+          addClass(el, expandClassName)
+        }
+        const closeExpandHandler = (e) => {
+          removeClass(el, expandClassName)
         }
 
-        el.addEventListener('click', handle)
-        el.__expandOnClickHandler__ = handle
+        closeList.forEach(elm => {
+          elm.addEventListener('click', closeExpandHandler)
+        })
+        el.addEventListener('click', expandHandler)
+
+        el.__expandHandler__ = expandHandler
+        el.__closeExpandHandler__ = closeExpandHandler
       },
-      unbind: function (el) {
-        el.removeEventListener('click', el.__expandOnClickHandler__)
+      unbind: function (el, binding, vnode) {
+        clickOutside.unbind(el, binding, vnode)
+        let vm = vnode.context
+        let {closeList} = vm
+
+        closeList.forEach(elm => {
+          elm.removeEventListener('click', el.__closeExpandHandler__)
+        })
+        el.removeEventListener('click', el.__expandHandler__)
       }
     },
 
@@ -61,6 +77,12 @@ export default {
         let vm = vnode.context
         let {closeList} = vm
         closeList.push(el)
+      },
+      unbind: function (el, binding, vnode) {
+        let vm = vnode.context
+        let {closeList} = vm
+        let idx = closeList.indexOf(el)
+        if (idx !== -1) { closeList.splice(idx, 1) }
       }
     },
 
@@ -69,6 +91,12 @@ export default {
         let vm = vnode.context
         let {exceptList} = vm
         exceptList.push(el)
+      },
+      unbind: function (el, binding, vnode) {
+        let vm = vnode.context
+        let {exceptList} = vm
+        let idx = exceptList.indexOf(el)
+        if (idx !== -1) { exceptList.splice(idx, 1) }
       }
     }
   },
@@ -76,18 +104,6 @@ export default {
     return {
       exceptList: [],
       closeList: []
-    }
-  },
-  computed: {
-    ...mapState(['currMenu'])
-  },
-  methods: {
-    ...mapMutations(['showMenu'])
-  },
-  watch: {
-    currMenu (val, oldVal) {
-      let shouldExpand = val === this.$el
-      shouldExpand ? addClass(this.$el, 'expand') : removeClass(this.$el, 'expand')
     }
   }
 }

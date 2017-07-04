@@ -1,39 +1,26 @@
-// const helper = {
-//   testSet: {},
-//   count: 0
-// }
-// helper.add = ({el, handler}) => {
-//   el.__count__ = helper.count
-//   helper.count++
-//   helper.testSet[helper.count] = {el, handler}
-// }
-// helper.remove = (el) => {
-//   delete helper.testSet[el.__count__]
-// }
-
-const clickoutsideAdd = (state, {el, handler}) => {
+const clickOutsideAdd = (state, {el, handler}) => {
   let count = state.count++
   state.testSet[count] = {el, handler}
-  el.__count__ = count
+  el.__clickOutsideCount__ = count
 }
 
-const clickoutsideRemove = (state, {el}) => {
-  delete state.testSet[el.__count__]
+const clickOutsideRemove = (state, {el}) => {
+  delete state.testSet[el.__clickOutsideCount__]
 }
 
-const moduleClickoutside = {
+const moduleclickOutside = {
   state: {
     count: 0,
     testSet: {}
   },
   mutations: {
-    clickoutsideAdd,
-    clickoutsideRemove
+    clickOutsideAdd,
+    clickOutsideRemove
   }
 }
 
 const globalHandler = (e) => {
-  let {testSet} = moduleClickoutside.state
+  let {testSet} = moduleclickOutside.state
   Object.values(testSet).forEach(({handler, el}) => {
     if (el.contains(e.target)) { return false }
     if (handler) { handler(e) }
@@ -44,15 +31,15 @@ export default {
   bind: function (el, binding, vnode) {
     // TODO: move 'helper' into $store
     let store = vnode.context.$store
-    if (!store.state.moduleClickoutside) {
-      store.registerModule('moduleClickoutside', moduleClickoutside)
+    if (!store.state.moduleclickOutside) {
+      store.registerModule('moduleclickOutside', moduleclickOutside)
     }
 
     let handler = binding.value
-    store.commit('clickoutsideAdd', {el, handler})
+    store.commit('clickOutsideAdd', {el, handler})
     document.body.addEventListener('click', globalHandler, true)
   },
   unbind: function (el, binding, vnode) {
-    vnode.context.$store.commit('clickoutsideRemove', {el})
+    vnode.context.$store.commit('clickOutsideRemove', {el})
   }
 }
