@@ -12,9 +12,9 @@ export default {
         // 点在close-expand上，关闭
         // 点在其他地方，打开
         let elm = e.target
-        if (elm.hasAttribute('except-expand')) {
+        if (elm.classList.contains('except-expand')) {
           return false
-        } else if (elm.hasAttribute('close-expand')) {
+        } else if (elm.classList.contains('close-expand')) {
           this.$el.shrink()
         } else {
           this.$el.expand()
@@ -24,15 +24,18 @@ export default {
   },
   data () {
     return {
-      expandClassName: 'expand'
+      expandClassName: 'expand',
+      isExpand: false
     }
   },
   mounted () {
     this.$el.expand = () => {
       this.$el.classList.add(this.expandClassName)
+      this.isExpand = true
     }
     this.$el.shrink = () => {
       this.$el.classList.remove(this.expandClassName)
+      this.isExpand = false
     }
   }
 }

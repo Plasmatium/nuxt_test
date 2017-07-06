@@ -1,7 +1,7 @@
 <template lang="html">
   <baseMenu id="option-menu" ref="root">
     <i class="fa fa-cog menu-icon" slot="menu-icon"></i>
-    <i class="fa fa-power-off close-icon" close-expand></i>
+    <i class="fa fa-power-off close-icon close-expand"></i>
     <div slot="main-panel">
       <slider>
         <i class="fa fa-file-text-o" slot="icon"></i>

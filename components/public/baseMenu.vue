@@ -11,10 +11,7 @@
 </template>
 
 <script>
-import expandDirectives from '~/functionalComponents/expandOnClick.mixin'
-
 export default {
-  mixins: [expandDirectives]
 }
 </script>
 
