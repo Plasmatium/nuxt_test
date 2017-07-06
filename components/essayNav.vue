@@ -1,24 +1,23 @@
 <template lang="html">
   <div :class="classList"
   id='essay-navigator'
-  :style='calcTmpStyle'
-  v-clickOutside="shrink"
-  @click="expand">
+  :style='calcTmpStyle'>
     <label for="bookID">bookID:</label>
-    <input name='bookID' v-model='bookID'/>
+    <input name='bookID' v-model='bookID' except-expand/>
     <label for="chptnum">Chapter Number:</label>
-    <input name='chptnum' v-model='chptnum'/>
-    <nuxt-link :to='queryUrl' class='button--grey'>Go</nuxt-link>
+    <input name='chptnum' v-model='chptnum' except-expand/>
+    <nuxt-link :to='queryUrl' class='button--grey' close-expand>
+      Go</nuxt-link>
   </div>
 </template>
 
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import {encodeQuery} from '~/server/utils'
-import clickOutside from '~/functionalComponents/clickOutside'
+import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
 
 export default {
-  directives: {clickOutside},
+  mixins: [expandOnClick],
   components: {
   },
   data () {

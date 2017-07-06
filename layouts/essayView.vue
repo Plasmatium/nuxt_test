@@ -8,12 +8,12 @@
       slot="dropdown-button"
       class="btn btn-secondary dropdown-toggle"
       role="button"
-      href="#">
+      href="#!">
         Font List
       </a>
-      <a class="dropdown-item" href="#" slot="dropdown-items">Font 1</a>
-      <a class="dropdown-item" href="#" slot="dropdown-items">Font 2</a>
-      <a class="dropdown-item" href="#" slot="dropdown-items">Font 3</a>
+      <a class="dropdown-item" href="#!" slot="dropdown-items">Font 1</a>
+      <a class="dropdown-item" href="#!" slot="dropdown-items">Font 2</a>
+      <a class="dropdown-item" href="#!" slot="dropdown-items">Font 3</a>
     </dropdown>
     <nuxt />
     <essay-nav></essay-nav>
