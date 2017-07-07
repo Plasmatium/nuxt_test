@@ -3,10 +3,10 @@
   id='essay-navigator'
   :style='calcTmpStyle'>
     <label for="bookID">bookID:</label>
-    <input name='bookID' v-model='bookID' class="except-expand"/>
+    <input name='bookID' v-model='bookID' except-expand/>
     <label for="chptnum">Chapter Number:</label>
-    <input name='chptnum' v-model='chptnum' class="except-expand"/>
-    <nuxt-link :to='queryUrl' class='button--grey close-expand'>
+    <input name='chptnum' v-model='chptnum' except-expand/>
+    <nuxt-link :to='queryUrl' class='button--grey' close-expand>
       Go</nuxt-link>
   </div>
 </template>

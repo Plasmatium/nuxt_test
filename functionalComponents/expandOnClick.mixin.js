@@ -5,37 +5,38 @@ export default {
   methods: {
     clickOutsideHandler ({isClickOutside, e}) {
       if (isClickOutside) {
-        // 点击外部，关闭
-        this.$el.shrink()
+        // 点击外部，若处于打开状态，则关闭
+        if (!this.isExpand) { return }
+        this.elShrink()
       } else {
-        // 点击内部，点在except-expand上，不动作
+        // 点击内部时，点在except-expand上，不动作
         // 点在close-expand上，关闭
         // 点在其他地方，打开
         let elm = e.target
-        if (elm.classList.contains('except-expand')) {
+        if (elm.hasAttribute('except-expand')) {
           return false
-        } else if (elm.classList.contains('close-expand')) {
-          this.$el.shrink()
+        } else if (elm.hasAttribute('close-expand')) {
+          this.elShrink()
         } else {
-          this.$el.expand()
+          this.elExpand()
         }
       }
+    },
+    elExpand () {
+      this.$el.classList.add(this.expandClassName)
+      this.isExpand = true
+      console.log(this.$el, 'expand')
+    },
+    elShrink () {
+      this.$el.classList.remove(this.expandClassName)
+      this.isExpand = false
+      console.log(this.$el, 'shrink')
     }
   },
   data () {
     return {
       expandClassName: 'expand',
       isExpand: false
-    }
-  },
-  mounted () {
-    this.$el.expand = () => {
-      this.$el.classList.add(this.expandClassName)
-      this.isExpand = true
-    }
-    this.$el.shrink = () => {
-      this.$el.classList.remove(this.expandClassName)
-      this.isExpand = false
     }
   }
 }
