@@ -28,12 +28,12 @@ export default {
     let itemsDom = this.$slots['dropdown-items']
 
     if (this.isExpand) {
-      buttonDom = immutable.set(buttonDom, ['data', 'attrs', 'close-expand'], '')
+      buttonDom = immutable.set(buttonDom, ['data', 'attrs', this.closeExpand], '')
     } else {
-      buttonDom = immutable.del(buttonDom, ['data', 'attrs', 'close-expand'])
+      buttonDom = immutable.del(buttonDom, ['data', 'attrs', this.closeExpand])
     }
     itemsDom = itemsDom.map(item => {
-      return immutable.set(item, ['data', 'attrs', 'close-expand'], '')
+      return immutable.set(item, ['data', 'attrs', this.closeExpand], '')
     })
     return (
       <div class={'dropdown' + (this.isExpand ? (' ' + this.expandClassName) : '')}>
@@ -46,4 +46,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dropdown-menu {
+  height: 30vh;
+  overflow: scroll;
+}
 </style>

@@ -1,4 +1,6 @@
 import clickOutside from '~/functionalComponents/clickOutside.mixin'
+import {getUID} from '~/server/utils'
+// const immutable = require('object-path-immutable')
 
 export default {
   mixins: [clickOutside],
@@ -13,9 +15,9 @@ export default {
         // 点在close-expand上，关闭
         // 点在其他地方，打开
         let elm = e.target
-        if (elm.hasAttribute('except-expand')) {
+        if (elm.hasAttribute(this.exceptExpand)) {
           return false
-        } else if (elm.hasAttribute('close-expand')) {
+        } else if (elm.hasAttribute(this.closeExpand)) {
           this.elShrink()
         } else {
           this.elExpand()
@@ -39,6 +41,26 @@ export default {
     return {
       expandClassName: 'expand',
       isExpand: false
+    }
+  },
+  computed: {
+    exceptExpand () {
+      return 'except-expand-' + getUID()
+    },
+    closeExpand () {
+      return 'close-expand-' + getUID()
+    }
+  },
+  directives: {
+    'close-expand': {
+      bind (el, binding, vnode) {
+        el.setAttribute(vnode.context.closeExpand, '')
+      }
+    },
+    'except-expand': {
+      bind (el, binding, vnode) {
+        el.setAttribute(vnode.context.exceptExpand, '')
+      }
     }
   }
 }

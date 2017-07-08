@@ -1,5 +1,6 @@
 // random feature
 let seed = 75426545
+let UIDCount = 0
 
 const random = function (seed) {
   return Number('0.' + Math.sin(seed).toString().substr(6))
@@ -81,6 +82,10 @@ const removeClass = (classStr, name) => {
   }, '')
 }
 
+const getUID = () => {
+  return `uid-${UIDCount++}`
+}
+
 module.exports = {
   seed,
   rand,
@@ -90,5 +95,6 @@ module.exports = {
   qs,
   isEqTitle,
   addClass,
-  removeClass
+  removeClass,
+  getUID
 }

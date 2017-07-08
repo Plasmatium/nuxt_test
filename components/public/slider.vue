@@ -3,6 +3,8 @@
 </template> -->
 
 <script>
+import dropdown from '~components/public/dropdown'
+
 export default {
   render (h) {
     let {icon = [], sheet = []} = this.$slots
@@ -64,7 +66,8 @@ export default {
     sliderContentClass () {
       return 'slider-content' + (this.fading ? ' fade-blur' : '')
     }
-  }
+  },
+  components: { dropdown }
 }
 </script>
 
