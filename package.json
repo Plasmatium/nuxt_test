@@ -8,7 +8,8 @@
     "axios": "^0.16.1",
     "lru-cache": "^4.1.0",
     "nuxt": "^1.0.0-alpha.4",
-    "object-hash": "^1.1.8"
+    "object-hash": "^1.1.8",
+    "object-path-immutable": "^0.5.1"
   },
   "scripts": {
     "dev": "node dev.js",

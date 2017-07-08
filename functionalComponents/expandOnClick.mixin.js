@@ -23,14 +23,16 @@ export default {
       }
     },
     elExpand () {
-      this.$el.classList.add(this.expandClassName)
+      // setTimeout(() => this.$el.classList.add(this.expandClassName), 0)
+      // this.$el.classList.add(this.expandClassName)
+      // DO NOT MODIFY this.$el DIRECTLY
       this.isExpand = true
-      console.log(this.$el, 'expand')
     },
     elShrink () {
-      this.$el.classList.remove(this.expandClassName)
+      // setTimeout(() => this.$el.classList.remove(this.expandClassName), 0)
+      // this.$el.classList.remove(this.expandClassName)
+      // DO NOT MODIFY this.$el DIRECTLY
       this.isExpand = false
-      console.log(this.$el, 'shrink')
     }
   },
   data () {

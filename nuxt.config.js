@@ -37,7 +37,8 @@ module.exports = {
     },
     vendor: [
       'axios',
-      'querystring'
+      'querystring',
+      'object-path-immutable'
     ],
     extractCSS: true
   },

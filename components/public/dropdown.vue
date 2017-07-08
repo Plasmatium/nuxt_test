@@ -14,6 +14,7 @@
 
 <script>
 import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
+const immutable = require('object-path-immutable')
 
 export default {
   mixins: [expandOnClick],
@@ -24,12 +25,22 @@ export default {
   },
   render (h) {
     let buttonDom = this.$slots['dropdown-button'][0]
-    let shouldCloseExpand = this.isExpand
-    console.log(shouldCloseExpand)
-    let attrs = buttonDom.data.attrs
-    buttonDom.data.attrs = Object.assign({}, attrs, {'close-expand': shouldCloseExpand})
-    console.log(buttonDom.data.attrs)
-    return <div class="dropdown">{buttonDom}</div>
+    let itemsDom = this.$slots['dropdown-items']
+
+    if (this.isExpand) {
+      buttonDom = immutable.set(buttonDom, ['data', 'attrs', 'close-expand'], '')
+    } else {
+      buttonDom = immutable.del(buttonDom, ['data', 'attrs', 'close-expand'])
+    }
+    itemsDom = itemsDom.map(item => {
+      return immutable.set(item, ['data', 'attrs', 'close-expand'], '')
+    })
+    return (
+      <div class={'dropdown' + (this.isExpand ? (' ' + this.expandClassName) : '')}>
+        {buttonDom}
+        <div class="dropdown-menu">{itemsDom}</div>
+      </div>
+    )
   }
 }
 </script>

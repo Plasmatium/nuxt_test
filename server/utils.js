@@ -65,6 +65,22 @@ const isEqTitle = (title1, title2) => {
   return title1 === title2
 }
 
+const addClass = (classStr, name) => {
+  let classList = classStr.split(/\s+/)
+  return classList.reduce((rslt, klass) => {
+    if (klass === '' || klass === name) { return rslt }
+    return rslt + ' ' + klass
+  }, name)
+}
+
+const removeClass = (classStr, name) => {
+  let classList = classStr.split(/\s/)
+  return classList.reduce((rslt, klass) => {
+    if (klass === name || klass === '') { return rslt }
+    return rslt + ' ' + klass
+  }, '')
+}
+
 module.exports = {
   seed,
   rand,
@@ -72,5 +88,7 @@ module.exports = {
   encodeQuery,
   decodeQuery,
   qs,
-  isEqTitle
+  isEqTitle,
+  addClass,
+  removeClass
 }
