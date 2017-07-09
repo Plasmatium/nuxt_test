@@ -6,6 +6,7 @@ export default {
   mixins: [clickOutside],
   methods: {
     clickOutsideHandler ({isClickOutside, e}) {
+      // debugger
       if (isClickOutside) {
         // 点击外部，若处于打开状态，则关闭
         if (!this.isExpand) { return }
@@ -40,16 +41,14 @@ export default {
   data () {
     return {
       expandClassName: 'expand',
-      isExpand: false
+      isExpand: false,
+      exceptExpand: null,
+      closeExpand: null
     }
   },
-  computed: {
-    exceptExpand () {
-      return 'except-expand-' + getUID()
-    },
-    closeExpand () {
-      return 'close-expand-' + getUID()
-    }
+  mounted () {
+    this.exceptExpand = 'except-expand-' + getUID()
+    this.closeExpand = 'close-expand-' + getUID()
   },
   directives: {
     'close-expand': {
