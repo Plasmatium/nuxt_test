@@ -24,50 +24,59 @@
 import baseMenu from '~components/public/baseMenu.vue'
 import slider from '~components/public/slider.vue'
 import dropdown from '~components/public/dropdown'
+import fontList from '~components/public/fontList'
 import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
 import {mapGetters} from 'vuex'
 
 export default {
   render (h) {
-    let fontsDomList = this.fontList.map(font => {
-      let style = `font-family: ${font}; font-weight: 300`
-      return (
-        <a
-          class="dropdown-item"
-          href="#!"
-          slot="dropdown-items"
-          style={style}>{font}</a>
-      )
-    })
-    let dropdownMenu = (
-      <dropdown>
-        <a
-        slot="dropdown-button"
-        class="btn btn-secondary dropdown-toggle"
-        role="button"
-        href="#!">
-          Font List
-        </a>
-        {fontsDomList}
-      </dropdown>
-    )
+    // let fontsDomList = this.fontList.map(font => {
+    //   let style = `font-family: ${font}; font-weight: 300`
+    //   return (
+    //     <a
+    //       class="dropdown-item"
+    //       href="#!"
+    //       slot="dropdown-items"
+    //       style={style}>{font}</a>
+    //   )
+    // })
+    // let dropdownMenu = (
+    //   <dropdown>
+    //     <a
+    //     slot="dropdown-button"
+    //     class="btn btn-secondary dropdown-toggle"
+    //     role="button"
+    //     href="#!">
+    //       Font List
+    //     </a>
+    //     {fontsDomList}
+    //   </dropdown>
+    // )
+
+    // let fontListDom = this.fontList.map(font => {
+    //   let style = `font-family: ${font}; font-weight: 300; margin: .1em`
+    //   return (
+    //     <button
+    //       type="button"
+    //       class="btn btn-secondary btn-sm"
+    //       style={style}>
+    //       {font}</button>
+    //   )
+    // })
 
     let iconList = ['fa-file-text-o', 'fa-paragraph', 'fa-bars', 'fa-clone']
-    let iconDomList = iconList.map(icon => {
+    let iconListDom = iconList.map(icon => {
       return <i class={'fa ' + icon} slot="icon"></i>
     })
 
     let ttlList = ['Main Text', 'Title', 'Menu', 'Board']
-    let sheetDomList = ttlList.map(ttl => {
+    let sheetDom = ttlList.map(ttl => {
       return (
         <div ttl={ttl} slot="sheet">
-          TEST Text
-          {dropdownMenu}
+          <font-list />
         </div>
       )
     })
-    iconDomList
-    sheetDomList
 
     let closeIcon = h('i', {
       class: ['fa', 'fa-power-off', 'close-icon'],
@@ -80,7 +89,7 @@ export default {
         <i class="fa fa-cog menu-icon" slot="menu-icon"></i>
         {closeIcon}
         <slider slot="main-panel">
-          {[...iconDomList, ...sheetDomList]}
+          {[...iconListDom, ...sheetDom]}
         </slider>
       </base-menu>
     )
@@ -93,6 +102,7 @@ export default {
   mixins: [expandOnClick],
   components: {
     'base-menu': baseMenu,
+    'font-list': fontList,
     slider,
     dropdown
   },
@@ -113,6 +123,7 @@ export default {
     right: 8%;
   }
 }
+
 .close-icon {
   font-size: 1.62em;
   position: absolute;

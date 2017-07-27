@@ -17,9 +17,10 @@ export default {
 
 <style lang="scss" scoped>
 * {
-  transition: all .3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   // border: solid 1px #17a;
 }
+
 .menu {
   display: flex;
   position: fixed;
@@ -52,8 +53,11 @@ export default {
 }
 .menu.expand {
   width: 80%;
-  height: 61.8%;
+  height: 90%;
   padding: 2%;
+
+  // min-width: 10em;
+  max-height: 50em;
 
   opacity: 1;
   background-color: rgba(255,255,255,.96);
