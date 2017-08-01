@@ -50,6 +50,11 @@ export default {
 }
 .main-panel {
   opacity: 0;
+  // height: 100%;
+  width: 80vw;
+  height: 90vh;
+  padding: 2vw;
+  overflow: auto;
 }
 .menu.expand {
   width: 80%;

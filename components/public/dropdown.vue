@@ -48,6 +48,7 @@ export default {
 <style lang="scss" scoped>
 .dropdown-menu {
   height: 30vh;
-  overflow: scroll;
+  overflow: auto;
+  width: inherit;
 }
 </style>

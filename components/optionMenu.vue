@@ -1,25 +1,3 @@
-<!-- <template lang="html">
-  <baseMenu id="option-menu" ref="root" :class="{expand: isExpand}">
-    <i class="fa fa-cog menu-icon" slot="menu-icon"></i>
-    <i class="fa fa-power-off close-icon" v-close-expand></i>
-    <div slot="main-panel">
-      <slider>
-        <i class="fa fa-file-text-o" slot="icon"></i>
-        <i class="fa fa-paragraph" slot="icon"></i>
-        <i class="fa fa-bars" slot="icon"></i>
-        <i class="fa fa-clone" slot="icon"></i>
-
-        <p slot="sheet" ttl="Main Text">asdf</p>
-        <p slot="sheet" ttl="Title">fdsa</p>
-        <div slot="sheet" ttl="Menu">
-          menu fonts
-        </div>
-        <p slot="sheet" ttl="Board">fdsa</p>
-      </slider>
-    </div>
-  </baseMenu>
-</template> -->
-
 <script>
 import baseMenu from '~components/public/baseMenu.vue'
 import slider from '~components/public/slider.vue'
@@ -30,40 +8,6 @@ import {mapGetters} from 'vuex'
 
 export default {
   render (h) {
-    // let fontsDomList = this.fontList.map(font => {
-    //   let style = `font-family: ${font}; font-weight: 300`
-    //   return (
-    //     <a
-    //       class="dropdown-item"
-    //       href="#!"
-    //       slot="dropdown-items"
-    //       style={style}>{font}</a>
-    //   )
-    // })
-    // let dropdownMenu = (
-    //   <dropdown>
-    //     <a
-    //     slot="dropdown-button"
-    //     class="btn btn-secondary dropdown-toggle"
-    //     role="button"
-    //     href="#!">
-    //       Font List
-    //     </a>
-    //     {fontsDomList}
-    //   </dropdown>
-    // )
-
-    // let fontListDom = this.fontList.map(font => {
-    //   let style = `font-family: ${font}; font-weight: 300; margin: .1em`
-    //   return (
-    //     <button
-    //       type="button"
-    //       class="btn btn-secondary btn-sm"
-    //       style={style}>
-    //       {font}</button>
-    //   )
-    // })
-
     let iconList = ['fa-file-text-o', 'fa-paragraph', 'fa-bars', 'fa-clone']
     let iconListDom = iconList.map(icon => {
       return <i class={'fa ' + icon} slot="icon"></i>
@@ -93,10 +37,6 @@ export default {
         </slider>
       </base-menu>
     )
-    // rsltDom.context.$slots = Object.assign(rsltDom.context.$slots, {
-    //   'menu-icon': [<i class="fa fa-cog menu-icon" slot="menu-icon"></i>],
-    // })
-
     return rsltDom
   },
   mixins: [expandOnClick],

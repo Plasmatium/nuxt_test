@@ -44,10 +44,10 @@ const store = new Vuex.Store({
     currFontWeight: 400,
 
     // ----- options ---------
-    currMenuStyle: '',
-    currTitleStyle: '',
-    currMainTextStyle: '',
-    currBoardStyle: '',
+    currMenuStyle: {'font-family': _fontList[14], 'font-weight': '400', 'font-size': '100%'},
+    currTitleStyle: {'font-family': _fontList[15], 'font-weight': '200', 'font-size': '100%'},
+    currMainTextStyle: {'font-family': _fontList[14], 'font-weight': '300', 'font-size': '100%'},
+    currBoardStyle: {'font-family': _fontList[14], 'font-weight': '300', 'font-size': '100%'},
     // -----------------------
 
     currQueryStr: null,

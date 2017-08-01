@@ -49,8 +49,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-/* IDEA:  */
+<style lang="scss">
 h1.title {
   color: orange;
 }
@@ -83,9 +82,15 @@ h1.title {
   color: #fff;
   background-color: #35495e;
 }
+
+h1,h2,h3,h4,h5,h6,p,
+.btn,.btn:hover,
+a,a:hover,
+input {
+  font-family: inherit;
+}
+
 #layout {
-  display: -webkit-flex;
-  display: -ms-flex;
   display: flex;
 
   flex-direction: column;
