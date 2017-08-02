@@ -4,7 +4,7 @@ import slider from '~components/public/slider.vue'
 import dropdown from '~components/public/dropdown'
 import fontList from '~components/public/fontList'
 import expandOnClick from '~/functionalComponents/expandOnClick.mixin'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 
 export default {
   render (h) {
@@ -17,7 +17,7 @@ export default {
     let sheetDom = ttlList.map(ttl => {
       return (
         <div ttl={ttl} slot="sheet">
-          <font-list />
+          <font-list optionPath={['currMenuStyle']} />
         </div>
       )
     })
@@ -47,7 +47,8 @@ export default {
     dropdown
   },
   computed: {
-    ...mapGetters(['fontList'])
+    ...mapGetters(['fontList']),
+    ...mapState([''])
   },
   methods: {
   }
