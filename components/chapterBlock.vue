@@ -1,6 +1,7 @@
 <script>
 import ap from './public/ap'
 import {mapState} from 'vuex'
+import {calcStyleStr} from '~/server/utils'
 
 export default {
   props: {
@@ -13,7 +14,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currMainTextStyle'])
+    ...mapState(['styleOptions'])
   },
   components: {
     ap
@@ -30,8 +31,9 @@ export default {
       // dom.push(paraDom)
       dom.push(<ap rawText={para}> </ap>)
     })
+    let styleStr = calcStyleStr(this.styleOptions.currMainTextStyle)
     return (
-      <div style={this.currMainTextStyle}>
+      <div style={styleStr}>
         {dom}
       </div>
     )
@@ -40,12 +42,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chapter {
-  color: #777;
-  line-height: 1.62em;
-}
 
-br {
-  line-height: 2.55em;
-}
 </style>

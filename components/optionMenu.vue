@@ -17,7 +17,7 @@ export default {
     let sheetDom = ttlList.map(ttl => {
       return (
         <div ttl={ttl} slot="sheet">
-          <font-list optionPath={['currMenuStyle']} />
+          <font-list optionPath={['currMainTextStyle']} />
         </div>
       )
     })

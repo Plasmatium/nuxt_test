@@ -86,6 +86,16 @@ const getUID = () => {
   return `uid-${UIDCount++}`
 }
 
+const calcStyleStr = (styleObj) => {
+  let rslt = ''
+  // Object.entries causes bugs
+  for (let key in styleObj) {
+    let val = styleObj[key]
+    rslt += `${key}:${val}; `
+  }
+  return rslt
+}
+
 module.exports = {
   seed,
   rand,
@@ -96,5 +106,6 @@ module.exports = {
   isEqTitle,
   addClass,
   removeClass,
-  getUID
+  getUID,
+  calcStyleStr
 }

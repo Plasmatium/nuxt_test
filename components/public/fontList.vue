@@ -1,52 +1,28 @@
 <template>
   <div class="font-list-view">
     <div class="font-option">
-      <div class="input-group">
-        <span class="input-group-addon">Font Weight</span>
-        <!-- <input type="text" class="form-control"> -->
-        <dropdown class="font-weight-dropdown">
-          <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
-            slot="dropdown-button">
-            {{getOption('font-weight')}}
-          </button>
-          <a v-for="idx in 9" slot="dropdown-items"
-            class="dropdown-item"
-            href="#!">
-            {{idx*100}}</a>
-        </dropdown>
+      <div v-for="key in controlKeys">
+        <!-- Font Option Group -->
+        <div class="input-group">
+          <span class="input-group-addon">{{key[0]}}</span>
+          <dropdown :class="key[1] + '-dropdown'">
+            <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
+              slot="dropdown-button">
+              {{getOption(key[1])}}
+            </button>
+            <a v-for="idx in getDataHelper(key[2])" slot="dropdown-items"
+              class="dropdown-item"
+              href="#!"
+              @click="setOption(key[1], key[3](idx))"
+              :style="typeof key[3](idx) === 'string' ?`font-family:${key[3](idx)}` :''">
+              {{key[3](idx)}}</a>
+          </dropdown>
+        </div>
+        <hr>
+        <!-- Font Option Group -->
       </div>
-      <hr>
-      <div class="input-group">
-        <span class="input-group-addon">Font Size</span>
-        <dropdown class="font-weight-dropdown">
-          <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
-            slot="dropdown-button">
-            {{getOption('font-size')}}
-          </button>
-          <a v-for="idx in 20" slot="dropdown-items"
-            class="dropdown-item"
-            href="#!">
-            {{idx*10}}%</a>
-        </dropdown>
-      </div>
-      <hr>
-      <div class="input-group">
-        <span class="input-group-addon">Font Family</span>
-        <dropdown class="font-list-dropdown">
-          <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
-            slot="dropdown-button">
-            {{getOption('font-family')}}
-          </button>
-          <a v-for="font in fontList" slot="dropdown-items"
-            class="dropdown-item"
-            href="#!"
-            :style="`font-family: ${font}; font-weight: 300; margin: .1em; flex-grow: 1`">
-            {{font}}</a>
-        </dropdown>
-      </div>
-      <br>
     </div>
-    <div class='text-preview'>
+    <div class='text-preview' :style="previewTextStyleStr">
       <p>{{testText1}}</p>
     </div>
   </div>
@@ -55,6 +31,7 @@
 <script>
 import {mapGetters, mapMutations, mapState} from 'vuex'
 import dropdown from '~components/public/dropdown'
+import {calcStyleStr} from '~/server/utils'
 
 const objectPath = require('object-path')
 
@@ -69,11 +46,20 @@ export default {
   },
   computed: {
     ...mapGetters(['fontList']),
-    ...mapState(['styleOptions'])
+    ...mapState(['styleOptions']),
+    previewTextStyleStr () {
+      return calcStyleStr(this.styleOptions[this.optionPath])
+    }
   },
   data () {
     return {
-      testText1: 'They stared, too, with a sullen indifference at the spectacle of a sergeant who entered their camp escorting a half-dozen recruits, and, with stiff salutation, turned them over to the captain at the door of his tent. The men of Company F might have studied these bounty-men, as they stood in file waiting for the company’s clerk to fill out his receipt, with more interest, had it been realized that they were probably the very last men to be enrolled by the Republic for the Civil War. But nobody knew that, and the arrival of recruits was an old story in the —th New York, which had been thrust into every available hellpit, it seemed to the men, since that first cruel corner at Bull Run. So they scowled at the newcomers in their fresh, clean uniforms, as these straggled doubtfully toward the fire, and gave them no welcome whatever.'
+      testText1: 'They stared, too, with a sullen indifference at the spectacle of a sergeant who entered their camp escorting a half-dozen recruits, and, with stiff salutation, turned them over to the captain at the door of his tent. The men of Company F might have studied these bounty-men, as they stood in file waiting for the company’s clerk to fill out his receipt, with more interest, had it been realized that they were probably the very last men to be enrolled by the Republic for the Civil War. But nobody knew that, and the arrival of recruits was an old story in the —th New York, which had been thrust into every available hellpit, it seemed to the men, since that first cruel corner at Bull Run. So they scowled at the newcomers in their fresh, clean uniforms, as these straggled doubtfully toward the fire, and gave them no welcome whatever.',
+
+      controlKeys: [
+        ['Font Weight', 'font-weight', 9, x => `${x * 100}`],
+        ['Font Size', 'font-size', 20, x => `${x * 10}%`],
+        ['Font Family', 'font-family', 'fontList', x => x]
+      ]
     }
   },
   methods: {
@@ -81,6 +67,17 @@ export default {
     getOption (additionalPath) {
       let path = [...this.optionPath, additionalPath]
       return objectPath.get(this.styleOptions, path)
+    },
+    setOption (additionalPath, newVal) {
+      let path = [...this.optionPath, additionalPath]
+      objectPath.set(this.styleOptions, path, newVal)
+    },
+    getDataHelper (val) {
+      if (typeof val === 'string') {
+        return this[val]
+      } else {
+        return val
+      }
     }
   }
 }
