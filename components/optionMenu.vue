@@ -59,9 +59,9 @@ export default {
 #option-menu {
   color: purple;
   top: 1.618em;
-  right: 10%;
+  right: 6%;
   .expand {
-    right: 8%;
+    right: 4%;
   }
 }
 

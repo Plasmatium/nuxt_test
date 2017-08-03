@@ -54,7 +54,7 @@ const store = new Vuex.Store({
         'font-family': _fontList[15], 'font-weight': '200', 'font-size': '100%'
       },
       currMainTextStyle: {
-        'font-family': _fontList[14], 'font-weight': '300', 'font-size': '100%'
+        'font-family': _fontList[14], 'font-weight': '300', 'font-size': '100%', 'color': '#777'
       },
       currBoardStyle: {
         'font-family': _fontList[14], 'font-weight': '300', 'font-size': '100%'
