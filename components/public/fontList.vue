@@ -6,6 +6,7 @@
           <span class="input-group-addon">Font Weight</span>
           <dropdown :class="'font-weight-dropdown'">
             <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
+              :style="`font-family:'${getOption('font-family')}'; font-weight:${getOption('font-weight')}`"
               slot="dropdown-button">
               {{getOption('font-weight')}}
             </button>
@@ -13,7 +14,7 @@
               class="dropdown-item"
               href="#!"
               @click="setOption('font-weight', idx*100)"
-              :style="`font-family:${getOption('font-family')}; font-weight:${idx*100}`">
+              :style="`font-family:'${getOption('font-family')}'; font-weight:${idx*100}`">
               {{idx*100}}</a>
           </dropdown>
         </div>
@@ -23,12 +24,14 @@
           <span class="input-group-addon">Font Size</span>
           <dropdown :class="'font-size-dropdown'">
             <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
+              :style="`font-family:'${getOption('font-family')}'; font-weight:${getOption('font-weight')}`"
               slot="dropdown-button">
               {{getOption('font-size')}}
             </button>
             <a v-for="idx in 20" slot="dropdown-items"
               class="dropdown-item"
               href="#!"
+              :style="`font-family:'${getOption('font-family')}'; font-weight:${getOption('font-weight')}`"
               @click="setOption('font-size', `${idx*10}%`)">
               {{idx*10}}%</a>
           </dropdown>
@@ -39,6 +42,7 @@
           <span class="input-group-addon">Font Family</span>
           <dropdown :class="'font-family-dropdown'">
             <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
+              :style="`font-family:'${getOption('font-family')}'; font-weight:${getOption('font-weight')}`"
               slot="dropdown-button">
               {{getOption('font-family')}}
             </button>
@@ -46,7 +50,7 @@
               class="dropdown-item"
               href="#!"
               @click="setOption('font-family', font)"
-              :style="`font-family:${font}; font-weight:${getOption('font-weight')}`">
+              :style="`font-family:'${font}'; font-weight:${getOption('font-weight')}`">
               {{font}}</a>
           </dropdown>
         </div>

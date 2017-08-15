@@ -91,6 +91,9 @@ const calcStyleStr = (styleObj) => {
   // Object.entries causes bugs
   for (let key in styleObj) {
     let val = styleObj[key]
+    if (key === 'font-family') {
+      val = `'${val}'`
+    }
     rslt += `${key}:${val}; `
   }
   return rslt
